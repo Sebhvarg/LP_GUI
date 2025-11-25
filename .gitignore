@@ -1,0 +1,6 @@
+__pycache__
+parsetab.py
+*.out
+*.pyc
+.venv
+*.log
