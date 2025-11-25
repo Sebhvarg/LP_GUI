@@ -1,42 +1,343 @@
-from PySide6.QtWidgets import (
-    QApplication, QWidget, QPushButton, QTextEdit, QVBoxLayout, QLabel
-)
 import sys
+import os
+import io
+from contextlib import redirect_stdout
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QPushButton, QTextEdit, QVBoxLayout, QHBoxLayout, 
+    QLabel, QListWidget, QInputDialog, QMessageBox, QFileDialog, QSplitter
+)
+from PySide6.QtGui import QIcon, QFont, QColor, QPalette
+from PySide6.QtCore import Qt
+
+sys.path.append(os.path.abspath("Analizadores"))
+
+try:
+    import Analizadores.Lexicon.lexer as lex_module
+    import Analizadores.Syntax.syntax as syn_module
+    import Analizadores.Semantic.main as sem_module
+except ImportError as e:
+    print(f"Error importando módulos: {e}")
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Analizador de Lenguajes")
+        self.setWindowTitle("ARust - Analizador de código Rust")
+        self.setWindowIcon(QIcon("./assets/img/logo.png"))
+        self.resize(1200, 800)
+        
+        # Configuración del tema
+        self.setup_theme()
 
-        # ----- Widgets -----
-        self.label = QLabel("Ingresa tu código:")
+        # Layout principal
+        main_layout = QHBoxLayout()
+        
+        # --- Panel de archivos ---
+        left_layout = QVBoxLayout()
+        
+        self.file_list_label = QLabel("Archivos Rust (.rs)")
+        self.file_list_label.setFont(QFont("Arial", 12, QFont.Bold))
+        
+        self.file_list = QListWidget()
+        self.file_list.itemClicked.connect(self.load_file_content)
+        
+        self.btn_create_file = QPushButton("Crear Archivo")
+        self.btn_create_file.clicked.connect(self.create_file)
+        
+        self.btn_delete_file = QPushButton("Eliminar Archivo")
+        self.btn_delete_file.clicked.connect(self.delete_file)
+        
+        self.btn_refresh_files = QPushButton("Recargar Lista")
+        self.btn_refresh_files.clicked.connect(self.refresh_file_list)
+
+        left_layout.addWidget(self.file_list_label)
+        left_layout.addWidget(self.file_list)
+        left_layout.addWidget(self.btn_create_file)
+        left_layout.addWidget(self.btn_delete_file)
+        left_layout.addWidget(self.btn_refresh_files)
+        
+        left_widget = QWidget()
+        left_widget.setLayout(left_layout)
+        left_widget.setMaximumWidth(250)
+
+        # --- Panel central ---
+        center_splitter = QSplitter(Qt.Vertical)
+        
+        # Editor
+        editor_widget = QWidget()
+        editor_layout = QVBoxLayout()
+        self.editor_label = QLabel("Editor de Código")
+        self.editor_label.setFont(QFont("Arial", 12, QFont.Bold))
         self.text_input = QTextEdit()
+        self.text_input.setFont(QFont("Consolas", 11))
+        self.text_input.setPlaceholderText("Escribe tu código Rust aquí...")
+        
+        self.btn_save_file = QPushButton("Guardar Cambios")
+        self.btn_save_file.clicked.connect(self.save_file)
+        
+        editor_layout.addWidget(self.editor_label)
+        editor_layout.addWidget(self.text_input)
+        editor_layout.addWidget(self.btn_save_file)
+        editor_widget.setLayout(editor_layout)
+        
+        # Errors
+        error_widget = QWidget()
+        error_layout = QVBoxLayout()
+        self.error_label = QLabel("Errores / Consola")
+        self.error_label.setFont(QFont("Arial", 10, QFont.Bold))
+        self.error_output = QTextEdit()
+        self.error_output.setReadOnly(True)
+        self.error_output.setMaximumHeight(150)
+        self.error_output.setStyleSheet("color: #ff5555; background-color: #1e1e1e;") 
+        
+        error_layout.addWidget(self.error_label)
+        error_layout.addWidget(self.error_output)
+        error_widget.setLayout(error_layout)
+        
+        center_splitter.addWidget(editor_widget)
+        center_splitter.addWidget(error_widget)
+        center_splitter.setStretchFactor(0, 4)
+        center_splitter.setStretchFactor(1, 1)
 
-        self.button = QPushButton("Analizar")
-        self.button.clicked.connect(self.on_analyze)
+        # --- Panel derecho botones de análisis y Resultados ---
+        right_layout = QVBoxLayout()
+        
+        self.analysis_label = QLabel("Herramientas de Análisis")
+        self.analysis_label.setFont(QFont("Arial", 12, QFont.Bold))
+        
+        self.btn_lexico = QPushButton("Análisis Léxico")
+        self.btn_lexico.clicked.connect(lambda: self.run_analysis("Léxico"))
+        
+        self.btn_sintactico = QPushButton("Análisis Sintáctico")
+        self.btn_sintactico.clicked.connect(lambda: self.run_analysis("Sintáctico"))
+        
+        self.btn_semantico = QPushButton("Análisis Semántico")
+        self.btn_semantico.clicked.connect(lambda: self.run_analysis("Semántico"))
+        
+        self.output_label = QLabel("Resultado del Análisis")
+        self.output_area = QTextEdit()
+        self.output_area.setReadOnly(True)
+        self.output_area.setFont(QFont("Consolas", 10))
+        
+        right_layout.addWidget(self.analysis_label)
+        right_layout.addWidget(self.btn_lexico)
+        right_layout.addWidget(self.btn_sintactico)
+        right_layout.addWidget(self.btn_semantico)
+        right_layout.addSpacing(20)
+        right_layout.addWidget(self.output_label)
+        right_layout.addWidget(self.output_area)
+        
+        right_widget = QWidget()
+        right_widget.setLayout(right_layout)
+        right_widget.setMaximumWidth(300)
 
-        self.output = QTextEdit()
-        self.output.setReadOnly(True)
+        
+        main_layout.addWidget(left_widget)
+        main_layout.addWidget(center_splitter)
+        main_layout.addWidget(right_widget)
 
-        # ----- Layout -----
-        layout = QVBoxLayout()
-        layout.addWidget(self.label)
-        layout.addWidget(self.text_input)
-        layout.addWidget(self.button)
-        layout.addWidget(self.output)
+        self.setLayout(main_layout)
+        
+        # Inicialización
+        self.ensure_rust_dir()
+        self.refresh_file_list()
+        self.current_file = None
 
-        self.setLayout(layout)
+    def setup_theme(self):
+        # Tema oscuro
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor(53, 53, 53))
+        palette.setColor(QPalette.WindowText, Qt.white)
+        palette.setColor(QPalette.Base, QColor(25, 25, 25))
+        palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        palette.setColor(QPalette.ToolTipBase, Qt.white)
+        palette.setColor(QPalette.ToolTipText, Qt.white)
+        palette.setColor(QPalette.Text, Qt.white)
+        palette.setColor(QPalette.Button, QColor(53, 53, 53))
+        palette.setColor(QPalette.ButtonText, Qt.white)
+        palette.setColor(QPalette.BrightText, Qt.red)
+        palette.setColor(QPalette.Link, QColor(42, 130, 218))
+        palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        palette.setColor(QPalette.HighlightedText, Qt.black)
+        self.setPalette(palette)
+        
+        # Hojas de estilo adicionales
+        self.setStyleSheet("""
+            QToolTip { 
+                color: #ffffff; 
+                background-color: #2a82da; 
+                border: 1px solid white; 
+            }
+            QPushButton {
+                background-color: #2b2b2b;
+                border: 1px solid #3c3c3c;
+                padding: 5px;
+                border-radius: 3px;
+            }
+            QPushButton:hover {
+                background-color: #3c3c3c;
+            }
+            QPushButton:pressed {
+                background-color: #505050;
+            }
+            QListWidget {
+                background-color: #1e1e1e;
+                border: 1px solid #3c3c3c;
+                color: #d4d4d4;
+            }
+            QTextEdit {
+                background-color: #1e1e1e;
+                border: 1px solid #3c3c3c;
+                color: #d4d4d4;
+            }
+        """)
 
-    # ----- Acción del botón -----
-    def on_analyze(self):
-        texto = self.text_input.toPlainText()
-        self.output.setText(f"Procesando...\n\n{texto}")
+    def ensure_rust_dir(self):
+        if not os.path.exists("rust_files"):
+            os.makedirs("rust_files")
+
+    def refresh_file_list(self):
+        self.file_list.clear()
+        if os.path.exists("rust_files"):
+            files = [f for f in os.listdir("rust_files") if f.endswith(".rs")]
+            self.file_list.addItems(files)
+
+    def create_file(self):
+        name, ok = QInputDialog.getText(self, "Crear Archivo", "Nombre del archivo (sin .rs):")
+        if ok and name:
+            if not name.endswith(".rs"):
+                name += ".rs"
+            path = os.path.join("rust_files", name)
+            if os.path.exists(path):
+                QMessageBox.warning(self, "Error", "El archivo ya existe.")
+            else:
+                with open(path, "w") as f:
+                    f.write("// Archivo Rust nuevo\nfn main() {\n    println!(\"Hola Mundo\");\n}")
+                self.refresh_file_list()
+
+    def delete_file(self):
+        item = self.file_list.currentItem()
+        if item:
+            name = item.text()
+            reply = QMessageBox.question(self, "Confirmar", f"¿Eliminar {name}?", QMessageBox.Yes | QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                os.remove(os.path.join("rust_files", name))
+                self.refresh_file_list()
+                self.text_input.clear()
+                self.current_file = None
+
+    def load_file_content(self, item):
+        name = item.text()
+        self.current_file = name
+        path = os.path.join("rust_files", name)
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                content = f.read()
+            self.text_input.setPlainText(content)
+            self.error_output.clear()
+            self.output_area.clear()
+
+    def save_file(self):
+        if self.current_file:
+            path = os.path.join("rust_files", self.current_file)
+            content = self.text_input.toPlainText()
+            with open(path, "w") as f:
+                f.write(content)
+            self.error_output.setText(f"Guardado: {self.current_file}")
+        else:
+            QMessageBox.warning(self, "Aviso", "Selecciona o crea un archivo primero.")
+
+    def run_analysis(self, type_name):
+        code = self.text_input.toPlainText()
+        if not code.strip():
+            self.error_output.setText("Error: El editor está vacío.")
+            return
+
+        self.output_area.setText(f"Ejecutando Análisis {type_name}...\n")
+        self.error_output.clear()
+        
+        # Captura de salida
+        f = io.StringIO()
+        
+        try:
+            with redirect_stdout(f):
+                if type_name == "Léxico":
+                    # Resetear lexer
+                    lex_module.lexer.lineno = 1
+                    lex_module.lexer.input(code)
+                    while True:
+                        tok = lex_module.lexer.token()
+                        if not tok:
+                            break
+                        print(f"Línea {tok.lineno}: {tok.type} -> {tok.value}")
+                        
+                elif type_name == "Sintáctico":
+                    # Resetear mensajes
+                    syn_module.mensajes.clear()
+                    syn_module.parser.parse(code)
+                    if not syn_module.mensajes:
+                        print("Análisis sintáctico completado sin errores.")
+                    else:
+                        for msg in syn_module.mensajes:
+                            print(msg)
+                            
+                elif type_name == "Semántico":
+                    
+                    sem_module.mensajes.clear()
+                    # Resetear tabla de símbolos
+                    sem_module.tabla_simbolos["variables"] = {}
+                    sem_module.tabla_simbolos["funciones"] = {}
+                    
+                    sem_module.parser.parse(code)
+                    
+                    if not sem_module.mensajes:
+                        print("Análisis semántico completado.")
+                        
+                        print("\n=== TABLA DE SÍMBOLOS ===")
+                        print("\n--- Variables ---")
+                        for var, info in sem_module.tabla_simbolos["variables"].items():
+                            if isinstance(info, dict):
+                                tipo = info.get("tipo", "unknown")
+                                const = "const" if info.get("const") else ("mut" if info.get("mutable") else "let")
+                                usado = "✓" if info.get("usado") else "✗ (no usada)"
+                                print(f"  {var}: {const} {tipo} - Usado: {usado}")
+                            else:
+                                print(f"  {var}: {info}")
+                        
+                        print("\n--- Funciones ---")
+                        for func, info in sem_module.tabla_simbolos["funciones"].items():
+                            retorno = info.get("retorno", "void")
+                            params = len(info.get("params", []))
+                            print(f"  {func}({params} params) -> {retorno}")
+                            
+                        # Advertencias
+                        print("\n--- Advertencias ---")
+                        for var, info in sem_module.tabla_simbolos["variables"].items():
+                            if isinstance(info, dict) and not info.get("usado", False):
+                                print(f"Advertencia: Variable '{var}' declarada pero no usada.")
+                    else:
+                        for msg in sem_module.mensajes:
+                            print(msg)
+
+            output = f.getvalue()
+            self.output_area.setText(output)
+            
+            # Verificar errores en la salida para actualizar la consola de errores
+            if "Error" in output or "error" in output:
+                 self.error_output.setText("Se encontraron errores. Ver detalles en el panel de resultados.")
+                 # Extraer líneas con Error
+                 errors = [line for line in output.split('\n') if "Error" in line or "error" in line]
+                 self.error_output.setText("\n".join(errors))
+            else:
+                 self.error_output.setText("Análisis finalizado sin errores críticos.")
+
+        except Exception as e:
+            self.error_output.setText(f"Excepción durante el análisis: {str(e)}")
+            self.output_area.setText(f.getvalue())
 
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.resize(500, 600)
     window.show()
     sys.exit(app.exec())
 
