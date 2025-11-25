@@ -4,3 +4,6 @@ parsetab.py
 *.pyc
 .venv
 *.log
+*build
+*dist
+*.spec
