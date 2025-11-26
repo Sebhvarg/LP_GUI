@@ -1,4 +1,5 @@
 // Archivo Rust nuevo
 fn main() {
-    println!("Hola Mundo");
+    let x = 8;
+    let u = y;
 }
