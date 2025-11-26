@@ -11,6 +11,16 @@ from PySide6.QtCore import Qt
 
 sys.path.append(os.path.abspath("Analizadores"))
 
+# Función para obtener la ruta correcta de los recursos y construir la ruta completa
+def resource_path(relative_path):
+    
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 try:
     import Analizadores.Lexicon.lexer as lex_module
     import Analizadores.Syntax.syntax as syn_module
@@ -23,7 +33,7 @@ class MainWindow(QWidget):
         super().__init__()
 
         self.setWindowTitle("ARust - Analizador de código Rust")
-        self.setWindowIcon(QIcon("./assets/img/logo.png"))
+        self.setWindowIcon(QIcon(resource_path("assets/img/logo.png")))
         self.resize(1200, 800)
         
         # Configuración del tema
