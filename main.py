@@ -345,7 +345,7 @@ class MainWindow(QWidget):
             if os.path.exists(path):
                 QMessageBox.warning(self, "Error", "El archivo ya existe.")
             else:
-                with open(path, "w") as f:
+                with open(path, "w", encoding='utf-8') as f:
                     f.write("// Archivo Rust nuevo\nfn main() {\n    println!(\"Hola Mundo\");\n}")
                 self.refresh_file_list()
 
@@ -365,7 +365,7 @@ class MainWindow(QWidget):
         self.current_file = name
         path = os.path.join("rust_files", name)
         if os.path.exists(path):
-            with open(path, "r") as f:
+            with open(path, "r", encoding='utf-8') as f:
                 content = f.read()
             self.text_input.setPlainText(content)
             self.error_output.clear()
@@ -375,7 +375,7 @@ class MainWindow(QWidget):
         if self.current_file:
             path = os.path.join("rust_files", self.current_file)
             content = self.text_input.toPlainText()
-            with open(path, "w") as f:
+            with open(path, "w", encoding='utf-8') as f:
                 f.write(content)
             self.error_output.setText(f"Guardado: {self.current_file}")
         else:
@@ -463,9 +463,14 @@ class MainWindow(QWidget):
                     
                     if not sem_module.mensajes:
                         print("Análisis semántico completado.")
-                        
-                        print("\n=== TABLA DE SÍMBOLOS ===")
-                        print("\n--- Variables ---")
+                    else:
+                        for msg in sem_module.mensajes:
+                            print(msg)
+                    
+                    # Imprimir tabla de símbolos siempre (con o sin errores)
+                    print("\n=== TABLA DE SÍMBOLOS ===")
+                    print("\n--- Variables ---")
+                    if sem_module.tabla_simbolos["variables"]:
                         for var, info in sem_module.tabla_simbolos["variables"].items():
                             if isinstance(info, dict):
                                 tipo = info.get("tipo", "unknown")
@@ -474,21 +479,27 @@ class MainWindow(QWidget):
                                 print(f"  {var}: {const} {tipo} - Usado: {usado}")
                             else:
                                 print(f"  {var}: {info}")
-                        
-                        print("\n--- Funciones ---")
+                    else:
+                        print("  (ninguna variable declarada)")
+                    
+                    print("\n--- Funciones ---")
+                    if sem_module.tabla_simbolos["funciones"]:
                         for func, info in sem_module.tabla_simbolos["funciones"].items():
                             retorno = info.get("retorno", "void")
                             params = len(info.get("params", []))
                             print(f"  {func}({params} params) -> {retorno}")
-                            
-                        # Advertencias
-                        print("\n--- Advertencias ---")
-                        for var, info in sem_module.tabla_simbolos["variables"].items():
-                            if isinstance(info, dict) and not info.get("usado", False):
-                                print(f"Advertencia: Variable '{var}' declarada pero no usada.")
                     else:
-                        for msg in sem_module.mensajes:
-                            print(msg)
+                        print("  (ninguna función declarada)")
+                        
+                    # Advertencias
+                    print("\n--- Advertencias ---")
+                    advertencias_encontradas = False
+                    for var, info in sem_module.tabla_simbolos["variables"].items():
+                        if isinstance(info, dict) and not info.get("usado", False):
+                            print(f"Advertencia: Variable '{var}' declarada pero no usada.")
+                            advertencias_encontradas = True
+                    if not advertencias_encontradas:
+                        print("  (ninguna advertencia)")
                 
                 # Escribir a salida global y generar log
                 sem_content = sem_output.getvalue()
