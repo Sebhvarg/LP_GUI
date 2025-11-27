@@ -279,7 +279,9 @@ def p_valor(p):
              | tupla
              | matriz
              | llamada_funcion_sin_puntocoma
-             | bloque_con_retorno'''
+             | bloque
+             | acceso_complejo
+             | instanciar_clase'''
      if isinstance(p[1], str) and p.slice[1].type == 'CADENA':
          p[0] = "str"
      elif isinstance(p[1], bool) and p.slice[1].type == 'BOOLEANO':
@@ -495,7 +497,7 @@ def p_llamada_funcion_sin_puntocoma(p):
 
 # REGLA: Métodos sobre strings y números (acceso con punto)
 def p_llamada_metodo_clase(p):
-    '''valor : IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ PAREN_DER
+    '''llamada_metodo_clase : IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ PAREN_DER
              | IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ repite_valores PAREN_DER'''
     nombre = p[1]
     metodo = p[3]
@@ -606,7 +608,7 @@ def p_tipo_dato(p):
 
 # REGLA 18: Validar acceso a tuplas
 def p_tupla_acceso(p):
-    '''valor : IDENTIFICADOR PUNTO ENTERO'''
+    '''tupla_acceso : IDENTIFICADOR PUNTO ENTERO'''
     nombre = p[1]
     indice = p[3]
     
@@ -623,7 +625,7 @@ def p_tupla_acceso(p):
 
 # REGLA 19: Validar acceso a matrices
 def p_matriz_acceso(p):
-    '''valor : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER'''
+    '''matriz_acceso : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER'''
     nombre = p[1]
     
     if nombre not in tabla_simbolos["variables"]:
@@ -720,4 +722,3 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print(f"Archivo no encontrado: {archivo_entrada}")
         log_token(f"Archivo no encontrado: {archivo_entrada}")
-    
