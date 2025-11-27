@@ -3,22 +3,20 @@
 # Analizador Semantico usando PLY.Yacc
 # Grupo 10
 # ------------------------------------------------------------
+# Integrantes:
+#   Derian Baque Choez (fernan0502)
+#   Sebastian Holguin (Sebhvarg)
+#   Carlos Ronquillo (carrbrus)
+# ------------------------------------------------------------
 import ply.yacc as yacc
 import sys
 import datetime
 import os
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from Lexicon.lexer import lexer, tokens
+from Lexicon.lexer import lexer, tokens, get_git_user
 from Syntax.syntax import *
 
-# ------------------------------------------------------------
-# Integrantes:
-#   Derian Baque Choez (fernan0502)
-#   Sebastian Holguin (Sebhvarg)
-#   Carlos Ronquillo (carrbrus)
-# ------------------------------------------------------------
 mensajes = []
 # ------------------------------------------------------------
 # Tabla de Símbolos
@@ -33,8 +31,6 @@ tabla_simbolos = {
             "split", "trim", "chars", "is_empty",
             "concat", "parse", "count"
         ],
-
-        
         "num-funciones": [
             "to_string", "to_le", "to_be", "to_ne",
             "swap_bytes", "to_be_bytes", "to_le_bytes",
@@ -48,16 +44,13 @@ tabla_simbolos = {
             "sin", "cos", "tan", "log", "log10", "log2",
             "exp", "exp2"
         ],
-
         "tipos_numericos": [
             "i8", "i16", "i32", "i64", "i128",
             "u8", "u16", "u32", "u64", "u128",
             "f32", "f64", "isize", "usize"
         ],
-
         "tipos_primitivos": ["bool", "char", "str"],
     },
-
     "clases": {}, 
     "scope_actual": "global",
     "scopes": {"global": {}}
@@ -126,7 +119,6 @@ def son_tipos_compatibles(tipo1, tipo2):
     """Verifica si dos tipos son compatibles para operaciones"""
     if tipo1 == tipo2:
         return True
-    
     tipos_num = tabla_simbolos["tipos"]["tipos_numericos"]
     # Permitir operaciones entre tipos numéricos similares
     if tipo1 in tipos_num and tipo2 in tipos_num:
@@ -157,8 +149,7 @@ def marcar_variable_usada(nombre):
 
 def p_asignacion(p):
     '''asignacion : VARIABLE IDENTIFICADOR IGUAL valor PUNTOCOMA
-                    | IDENTIFICADOR IGUAL valor PUNTOCOMA                    
-    '''
+                    | IDENTIFICADOR IGUAL valor PUNTOCOMA'''
     # REGLA 1: Declaración de variable inmutable (let x = valor)
     if len(p) == 6 and p.slice[1].type == 'VARIABLE':
         nombre = p[2]
