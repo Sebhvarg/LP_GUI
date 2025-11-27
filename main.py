@@ -252,6 +252,10 @@ class MainWindow(QWidget):
         self.output_area = QTextEdit()
         self.output_area.setReadOnly(True)
         self.output_area.setFont(QFont("Consolas", 10))
+
+        # Botón para limpiar consola y resultados
+        self.btn_clear_outputs = QPushButton("Limpiar salida")
+        self.btn_clear_outputs.clicked.connect(self.clear_outputs)
         
         right_layout.addWidget(self.analysis_label)
         right_layout.addWidget(self.btn_lexico)
@@ -261,6 +265,7 @@ class MainWindow(QWidget):
         right_layout.addSpacing(20)
         right_layout.addWidget(self.output_label)
         right_layout.addWidget(self.output_area)
+        right_layout.addWidget(self.btn_clear_outputs)
         
         right_widget = QWidget()
         right_widget.setLayout(right_layout)
@@ -382,6 +387,11 @@ class MainWindow(QWidget):
         else:
             QMessageBox.warning(self, "Aviso", "Selecciona o crea un archivo primero.")
 
+    def clear_outputs(self):
+        # Limpia la consola de errores y el área de resultados
+        self.error_output.clear()
+        self.output_area.clear()
+
     def run_analysis(self, type_name):
         code = self.text_input.toPlainText()
         if not code.strip():
@@ -418,7 +428,11 @@ class MainWindow(QWidget):
                     if type_name == "Todos":
                         print("=== ANÁLISIS LÉXICO ===")
                     # Resetear lexer
-                    lex_module.lexer.lineno = 1
+                    # Limpiar todas las listas de mensajes categorizadas
+                    sem_module.mensajes.clear()
+                    if hasattr(sem_module, 'errores_sintacticos'): sem_module.errores_sintacticos.clear()
+                    if hasattr(sem_module, 'errores_semanticos'): sem_module.errores_semanticos.clear()
+                    if hasattr(sem_module, 'errores_lexicos'): sem_module.errores_lexicos.clear()
                     lex_module.lexer.input(code)
                     while True:
                         tok = lex_module.lexer.token()
@@ -427,8 +441,27 @@ class MainWindow(QWidget):
                         print(f"Línea {tok.lineno}: {tok.type} -> {tok.value}")
                     if type_name == "Todos":
                         print("\n")
-                
-                # Escribir a salida global y generar log
+                    # Secciones de errores categorizados
+                        if type_name == "Todos":
+                            # Bloque de errores semánticos ocultado a petición del usuario.
+                            pass
+
+                    print("--- Errores Sintácticos (durante semántico) ---")
+                    if getattr(sem_module, 'errores_sintacticos', []):
+                        for msg in sem_module.errores_sintacticos:
+                            print(msg)
+                    else:
+                        print("  (ninguno)")
+
+                    print("--- Errores Léxicos (durante semántico) ---")
+                    if getattr(sem_module, 'errores_lexicos', []):
+                        for msg in sem_module.errores_lexicos:
+                            print(msg)
+                    else:
+                        print("  (ninguno)")
+
+                    if not sem_module.mensajes:
+                        print("\nAnálisis semántico completado.")
                 lex_content = lex_output.getvalue()
                 global_output.write(lex_content)
                 generate_log("Léxico", lex_content, current_filename)
@@ -439,10 +472,23 @@ class MainWindow(QWidget):
                     if type_name == "Todos":
                         print("=== ANÁLISIS SINTÁCTICO ===")
                     # Resetear mensajes
-                    syn_module.mensajes.clear()
+                    # Preparar heurísticas de sintaxis (carga de código fuente completa)
+                    if hasattr(syn_module, 'set_source'):
+                        syn_module.set_source(code)
+                    # Reestablecer estructuras de errores si existe utilitario interno
+                    if hasattr(syn_module, '_reset_errores'):
+                        syn_module._reset_errores()
+                    else:
+                        syn_module.mensajes.clear()
+                    # Desactivar reporte de errores léxicos para modo sintáctico puro
+                    if hasattr(lex_module, 'set_lex_error_reporting'):
+                        lex_module.set_lex_error_reporting(False)
                     # Resetear lexer
                     lex_module.lexer.lineno = 1
                     syn_module.parser.parse(code, lexer=lex_module.lexer)
+                    # Re-activar errores léxicos después (para futuros análisis léxicos/semánticos)
+                    if hasattr(lex_module, 'set_lex_error_reporting'):
+                        lex_module.set_lex_error_reporting(True)
                     if not syn_module.mensajes:
                         print("Análisis sintáctico completado sin errores.")
                     else:
@@ -463,6 +509,22 @@ class MainWindow(QWidget):
                         print("=== ANÁLISIS SEMÁNTICO ===")
                     
                     sem_module.mensajes.clear()
+                    # Limpiar categorizaciones previas
+                    if hasattr(sem_module, 'errores_semanticos'): sem_module.errores_semanticos.clear()
+                    if hasattr(sem_module, 'errores_sintacticos'): sem_module.errores_sintacticos.clear()
+                    if hasattr(sem_module, 'errores_lexicos'): sem_module.errores_lexicos.clear()
+                    # Ajustar flags según tipo de análisis: en 'Semántico' puro ocultar léxicos/sintácticos;
+                    # en 'Todos' mantenerlos para mostrar categorización completa.
+                    if type_name == "Semántico":
+                        if hasattr(sem_module, 'set_syntax_error_reporting'):
+                            sem_module.set_syntax_error_reporting(False)
+                        if hasattr(lex_module, 'set_lex_error_reporting'):
+                            lex_module.set_lex_error_reporting(False)
+                    else:  # "Todos"
+                        if hasattr(sem_module, 'set_syntax_error_reporting'):
+                            sem_module.set_syntax_error_reporting(True)
+                        if hasattr(lex_module, 'set_lex_error_reporting'):
+                            lex_module.set_lex_error_reporting(True)
                     # Resetear tabla de símbolos
                     sem_module.tabla_simbolos["variables"] = {}
                     sem_module.tabla_simbolos["funciones"] = {}
@@ -470,12 +532,18 @@ class MainWindow(QWidget):
                     # Resetear lexer
                     lex_module.lexer.lineno = 1
                     sem_module.parser.parse(code, lexer=lex_module.lexer)
+                    # Post-scan para capturar reasignaciones perdidas por recuperación sintáctica
+                    if hasattr(sem_module, 'post_semantic_scan'):
+                        sem_module.post_semantic_scan(code)
+                    # Re-activar reporte léxico para futuras ejecuciones
+                    if hasattr(lex_module, 'set_lex_error_reporting'):
+                        lex_module.set_lex_error_reporting(True)
+                    # Re-activar reporte sintáctico para otras fases si se desea
+                    if hasattr(sem_module, 'set_syntax_error_reporting'):
+                        sem_module.set_syntax_error_reporting(True)
                     
                     if not sem_module.mensajes:
                         print("Análisis semántico completado.")
-                    else:
-                        for msg in sem_module.mensajes:
-                            print(msg)
                     
                     # Imprimir tabla de símbolos siempre (con o sin errores)
                     print("\n=== TABLA DE SÍMBOLOS ===")
@@ -510,6 +578,29 @@ class MainWindow(QWidget):
                             advertencias_encontradas = True
                     if not advertencias_encontradas:
                         print("  (ninguna advertencia)")
+
+                    # Sección adicional: constantes y modificaciones a constantes detectadas
+                    print("\n--- Constantes (redeclaraciones / modificaciones) ---")
+                    const_related = []
+                    for msg in getattr(sem_module, 'errores_semanticos', []):
+                        lower = msg.lower()
+                        if 'constante' in lower:
+                            # Filtrar solo mensajes semánticos que mencionan constante
+                            const_related.append(msg)
+                    if const_related:
+                        for cr in const_related:
+                            print(cr)
+                    else:
+                        print("  (ninguna incidencia sobre constantes)")
+
+                    # Sección adicional: resumen rápido de modificaciones de constantes
+                    mods_const = [m for m in const_related if 'no se puede modificar la constante' in m.lower()]
+                    if mods_const:
+                        print(f"\nTotal modificaciones inválidas a constantes: {len(mods_const)}")
+                    # Sección adicional: redeclaraciones
+                    redecls_const = [m for m in const_related if 'ya fue declarada previamente' in m.lower()]
+                    if redecls_const:
+                        print(f"Total redeclaraciones de constantes: {len(redecls_const)}")
                 
                 # Escribir a salida global y generar log
                 sem_content = sem_output.getvalue()
@@ -521,12 +612,18 @@ class MainWindow(QWidget):
             
             # Verificar errores en la salida para actualizar la consola de errores
             if "Error" in output or "error" in output:
-                 self.error_output.setText("Se encontraron errores. Ver detalles en el panel de resultados.")
-                 # Extraer líneas con Error
-                 errors = [line for line in output.split('\n') if "Error" in line or "error" in line]
-                 self.error_output.setText("\n".join(errors))
+                # Si ejecutamos semántico, usar listas categorizadas para resumen
+                if run_semantico and hasattr(sem_module, 'errores_semanticos'):
+                    # Mostrar solo conteo semántico cuando ejecutamos fase semántica
+                    resumen = [f"Semánticos: {len(sem_module.errores_semanticos)}"]
+                    self.error_output.setText("Se encontraron errores.\n" + " | ".join(resumen))
+                else:
+                    self.error_output.setText("Se encontraron errores. Ver detalles en el panel de resultados.")
+                # Extraer líneas con Error (fallback general)
+                errors = [line for line in output.split('\n') if "Error" in line or "error" in line]
+                self.error_output.append("\nDetalle:\n" + "\n".join(errors[:50]))  # limitar a primeros 50
             else:
-                 self.error_output.setText("Análisis finalizado sin errores críticos.")
+                self.error_output.setText("Análisis finalizado sin errores críticos.")
 
         except Exception as e:
             self.error_output.setText(f"Excepción durante el análisis: {str(e)}")

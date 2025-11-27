@@ -1,8 +1,0 @@
-Error semántico en la línea 20, columna 498: Token inesperado 'let'
-Error semántico en la línea 28, columna 757: Token inesperado 'contador'
-Error semántico en la línea 33, columna 887: Token inesperado 'const'
-Error semántico en la línea 36, columna 999: Token inesperado ';'
-Error semántico en la línea 39, columna 1066: Token inesperado '..'
-Error semántico en la línea 46, columna 1276: Token inesperado '5'
-Error semántico en la línea 52, columna 1482: Token inesperado ';'
-Error semántico en la línea 57, columna 1603: Token inesperado '}'

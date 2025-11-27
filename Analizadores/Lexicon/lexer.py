@@ -205,10 +205,19 @@ def t_nueva_linea(t):
 
 
 
+report_lex_errors = True
+
+def set_lex_error_reporting(enabled: bool):
+    """Activar o desactivar la impresión y log de errores léxicos.
+    Útil para que el análisis sintáctico no muestre errores léxicos redundantes."""
+    global report_lex_errors
+    report_lex_errors = enabled
+
 def t_error(t):
-    mensaje = f"Error léxico: carácter no reconocido '{t.value[0]}' en línea {t.lineno}"
-    print(mensaje)
-    log_token(mensaje)
+    if report_lex_errors:
+        mensaje = f"Error léxico: carácter no reconocido '{t.value[0]}' en línea {t.lineno}"
+        print(mensaje)
+        log_token(mensaje)
     t.lexer.skip(1)
 
 # -------- Fin Fernando --------

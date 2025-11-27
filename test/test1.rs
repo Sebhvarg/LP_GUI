@@ -17,7 +17,7 @@ fn main() {
     let mut contador = 0
     
     // Error semántico: reasignar variable inmutable
-    let valor = 100;
+    let valor = 100
     valor = 200;  // valor no es mutable
     
     // Error semántico: tipos incompatibles

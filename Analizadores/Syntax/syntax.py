@@ -8,6 +8,7 @@ import ply.yacc as yacc
 import sys
 import datetime
 import os
+import re
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Lexicon.lexer import tokens, get_git_user
@@ -18,7 +19,52 @@ from Lexicon.lexer import tokens, get_git_user
 #   Carlos Ronquillo (carrbrus)
 # ------------------------------------------------------------
 
-mensajes = [] #Guarda los errores
+mensajes = []  # Guarda los errores
+# Conjunto para evitar duplicados exactos
+_errores_reportados = set()
+
+# Líneas completas de la fuente para heurísticas (set_source las carga)
+source_lines = []
+
+def set_source(code: str):
+    """Registrar el código fuente (líneas) para heurísticas en p_error.
+    Debe llamarse antes de parser.parse(code)."""
+    global source_lines
+    source_lines = code.splitlines()
+
+def _add_error(mensaje: str, clave: tuple):
+    """Añade un error solo si su clave no se ha reportado aún."""
+    if clave in _errores_reportados:
+        return
+    _errores_reportados.add(clave)
+    mensajes.append(mensaje)
+
+def _line_has_missing_semicolon(line: str) -> bool:
+    """Heurística: línea parece una declaración que debería terminar en ';' y no lo hace."""
+    if line is None:
+        return False
+    stripped = line.strip()
+    if not stripped:
+        return False
+    # Patrones típicos de declaración / asignación inicial
+    patrones = [
+        r"^let(\s+mut)?\s+\w+\s*(=.*)?$",
+        r"^const\s+\w+\s*(:.*)?(=.*)?$",
+        r"^fn\s+\w+\s*\(.*\).*$",  # funciones (si se esperaba bloque puede no necesitar ;) )
+    ]
+    if any(re.match(p, stripped) for p in patrones):
+        # Si termina con '{' no requiere ;
+        if stripped.endswith('{'):
+            return False
+        # Si ya termina con ';' está bien
+        if stripped.endswith(';'):
+            return False
+        return True
+    return False
+
+def _reset_errores():
+    mensajes.clear()
+    _errores_reportados.clear()
 
 # Precedencia de operadores
 precedence = (
@@ -77,6 +123,9 @@ def p_asignacion_constante(p):
 def p_asignacion_explicita_valor(p):
     '''asignacion : VARIABLE IDENTIFICADOR DOSPUNTOS tipo_dato IGUAL valor PUNTOCOMA
     '''
+
+def p_asignacion_constante_explicita(p):
+    'asignacion : CONSTANTE IDENTIFICADOR DOSPUNTOS tipo_dato IGUAL valor PUNTOCOMA'
     
 def  p_valor(p):
     '''valor : CADENA
@@ -356,96 +405,159 @@ def p_expresion_match(p):
     
 # Error rule for syntax errors
 def p_error(p):
+    """Manejo y recuperación de errores sintácticos con heurísticas.
+    - Detecta fin de archivo.
+    - Heurística de falta de ';'.
+    - Recuperación: avanza tokens hasta sincronización.
+    - Deduplicación de mensajes.
+    """
     if not p:
-        mensaje_error = "Error sintáctico: fin de archivo inesperado. Puede faltar cerrar un bloque o una declaración"
+        mensaje_error = (
+            "Error sintáctico: fin de archivo inesperado. Puede faltar cerrar un bloque o una declaración"
+        )
         print(mensaje_error)
-        mensajes.append(mensaje_error)
+        _add_error(mensaje_error, ("EOF",))
         return
-    
-    # Obtener información del token
+
     token_value = p.value
     token_type = p.type
     lineno = p.lineno
-    
-    # Generar mensajes de error específicos según el tipo de token
+
+    # Heurística: si aparece un token que inicia declaración y la línea anterior parece necesitar ';'
+    if token_type in ['VARIABLE', 'CONSTANTE', 'MUTABLE', 'FUNCION'] and lineno > 1:
+        prev_line = source_lines[lineno - 2] if lineno - 2 < len(source_lines) else None
+        if _line_has_missing_semicolon(prev_line):
+            mensaje_error = (
+                f"Error sintáctico en la línea {lineno - 1}: falta punto y coma al final de la declaración"
+            )
+            print(mensaje_error)
+            _add_error(mensaje_error, (lineno - 1, 'FALTA_PUNTOCOMA'))
+            # Intentar continuar sin reportar este token como error adicional.
+            return
+
     mensaje_error = f"Error sintáctico en la línea {lineno}: "
-    
-    # Errores comunes de puntuación
+
     if token_type == 'PUNTOCOMA':
         mensaje_error += f"punto y coma inesperado '{token_value}'"
     elif token_type == 'LLAVE_DER':
-        mensaje_error += f"llave de cierre '}}' inesperada. Posible llave de apertura faltante o estructura mal formada"
+        mensaje_error += (
+            f"llave de cierre '}}' inesperada. Posible llave de apertura faltante o estructura mal formada"
+        )
     elif token_type == 'LLAVE_IZQ':
-        mensaje_error += f"llave de apertura '{{' inesperada. Revise la sintaxis de la declaración anterior"
+        mensaje_error += (
+            f"llave de apertura '{{' inesperada. Revise la sintaxis de la declaración anterior"
+        )
     elif token_type == 'PAREN_DER':
-        mensaje_error += f"paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante"
+        mensaje_error += (
+            "paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante"
+        )
     elif token_type == 'PAREN_IZQ':
-        mensaje_error += f"paréntesis de apertura '(' inesperado. Revise la sintaxis"
+        mensaje_error += "paréntesis de apertura '(' inesperado. Revise la sintaxis"
     elif token_type == 'CORCHETE_DER':
-        mensaje_error += f"corchete de cierre ']' inesperado. Posible corchete de apertura faltante"
+        mensaje_error += (
+            "corchete de cierre ']' inesperado. Posible corchete de apertura faltante"
+        )
     elif token_type == 'CORCHETE_IZQ':
-        mensaje_error += f"corchete de apertura '[' inesperado. Revise la sintaxis del array o vector"
-    
-    # Errores de operadores
+        mensaje_error += (
+            "corchete de apertura '[' inesperado. Revise la sintaxis del array o vector"
+        )
     elif token_type in ['SUMA', 'RESTA', 'MULT', 'DIV', 'MODULO']:
-        mensaje_error += f"operador aritmético '{token_value}' inesperado. Revise la expresión"
+        mensaje_error += (
+            f"operador aritmético '{token_value}' inesperado. Revise la expresión"
+        )
     elif token_type in ['IGUAL', 'MAS_IGUAL', 'MENOS_IGUAL']:
-        mensaje_error += f"operador de asignación '{token_value}' inesperado. Posible falta de identificador o valor"
-    elif token_type in ['MAYOR', 'MENOR', 'MAYOR_IGUAL', 'MENOR_IGUAL', 'IGUALDOBLE', 'DIFERENTE']:
-        mensaje_error += f"operador relacional '{token_value}' inesperado. Revise la expresión booleana"
-    
-    # Errores de palabras reservadas
+        mensaje_error += (
+            f"operador de asignación '{token_value}' inesperado. Posible falta de identificador o valor"
+        )
+    elif token_type in [
+        'MAYOR', 'MENOR', 'MAYOR_IGUAL', 'MENOR_IGUAL', 'IGUALDOBLE', 'DIFERENTE'
+    ]:
+        mensaje_error += (
+            f"operador relacional '{token_value}' inesperado. Revise la expresión booleana"
+        )
     elif token_type in ['VARIABLE', 'MUTABLE', 'CONSTANTE']:
-        mensaje_error += f"palabra reservada '{token_value}' en posición incorrecta. Revise la sintaxis de declaración"
+        mensaje_error += (
+            f"palabra reservada '{token_value}' en posición incorrecta. Revise la sintaxis de declaración"
+        )
     elif token_type == 'FUNCION':
-        mensaje_error += f"palabra reservada 'fn' inesperada. Revise la sintaxis de la función"
+        mensaje_error += "palabra reservada 'fn' inesperada. Revise la sintaxis de la función"
     elif token_type in ['SI', 'SINO', 'MIENTRAS', 'POR']:
-        mensaje_error += f"palabra reservada '{token_value}' en posición incorrecta. Revise la estructura de control"
+        mensaje_error += (
+            f"palabra reservada '{token_value}' en posición incorrecta. Revise la estructura de control"
+        )
     elif token_type == 'COINCIDIR':
-        mensaje_error += f"palabra reservada 'match' inesperada. Revise la sintaxis del match"
+        mensaje_error += (
+            "palabra reservada 'match' inesperada. Revise la sintaxis del match"
+        )
     elif token_type == 'FLECHA_DOBLE':
-        mensaje_error += f"operador '=>' inesperado. Solo puede usarse dentro de expresiones match"
+        mensaje_error += "operador '=>' inesperado. Solo puede usarse dentro de expresiones match"
     elif token_type == 'RETORNO':
-        mensaje_error += f"palabra reservada 'return' inesperada. Solo puede usarse dentro de funciones"
+        mensaje_error += (
+            "palabra reservada 'return' inesperada. Solo puede usarse dentro de funciones"
+        )
     elif token_type in ['CONTINUAR', 'QUIEBRE']:
-        mensaje_error += f"palabra reservada '{token_value}' inesperada. Solo puede usarse dentro de ciclos"
+        mensaje_error += (
+            f"palabra reservada '{token_value}' inesperada. Solo puede usarse dentro de ciclos"
+        )
     elif token_type == 'ESTRUCTURA':
-        mensaje_error += f"palabra reservada 'struct' inesperada. Revise la sintaxis de la clase"
-    
-    # Errores de identificadores y valores
+        mensaje_error += (
+            "palabra reservada 'struct' inesperada. Revise la sintaxis de la clase"
+        )
     elif token_type == 'IDENTIFICADOR':
-        mensaje_error += f"identificador '{token_value}' inesperado. Puede faltar un operador o declaración"
+        mensaje_error += (
+            f"identificador '{token_value}' inesperado. Puede faltar un operador o declaración"
+        )
     elif token_type == 'ENTERO':
-        mensaje_error += f"valor entero '{token_value}' inesperado. Revise la expresión o asignación"
+        mensaje_error += (
+            f"valor entero '{token_value}' inesperado. Revise la expresión o asignación"
+        )
     elif token_type == 'FLOTANTE':
-        mensaje_error += f"valor flotante '{token_value}' inesperado. Revise la expresión o asignación"
+        mensaje_error += (
+            f"valor flotante '{token_value}' inesperado. Revise la expresión o asignación"
+        )
     elif token_type == 'CADENA':
-        mensaje_error += f"cadena '{token_value}' inesperada. Revise el contexto de uso"
+        mensaje_error += (
+            f"cadena '{token_value}' inesperada. Revise el contexto de uso"
+        )
     elif token_type == 'CARACTER':
-        mensaje_error += f"carácter '{token_value}' inesperado. Revise el contexto de uso"
-    
-    # Errores de tipos de datos
-    elif token_type in ['I8', 'I16', 'I32', 'I64', 'I128', 'U8', 'U16', 'U32', 'U64', 'U128', 'F32', 'F64', 
-                        'BOOLEANO_TIPO', 'CARACTER_TIPO', 'CADENA_TIPO', 'ITIPO', 'UTIPO']:
-        mensaje_error += f"tipo de dato '{token_value}' inesperado. Revise la declaración de variable o función"
-    
-    # Otros símbolos
+        mensaje_error += (
+            f"carácter '{token_value}' inesperado. Revise el contexto de uso"
+        )
+    elif token_type in [
+        'I8','I16','I32','I64','I128','U8','U16','U32','U64','U128','F32','F64','BOOLEANO_TIPO','CARACTER_TIPO','CADENA_TIPO','ITIPO','UTIPO'
+    ]:
+        mensaje_error += (
+            f"tipo de dato '{token_value}' inesperado. Revise la declaración de variable o función"
+        )
     elif token_type == 'COMA':
-        mensaje_error += f"coma ',' inesperada. Revise la lista de parámetros o valores"
+        mensaje_error += (
+            "coma ',' inesperada. Revise la lista de parámetros o valores"
+        )
     elif token_type == 'DOSPUNTOS':
-        mensaje_error += f"dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo"
+        mensaje_error += (
+            "dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo"
+        )
     elif token_type == 'PUNTO':
-        mensaje_error += f"punto '.' inesperado. Revise el acceso a atributos o métodos"
+        mensaje_error += (
+            "punto '.' inesperado. Revise el acceso a atributos o métodos"
+        )
     elif token_type == 'FLECHA':
-        mensaje_error += f"flecha '->' inesperada. Revise la sintaxis de retorno de función"
-    
-    # Error genérico
+        mensaje_error += "flecha '->' inesperada. Revise la sintaxis de retorno de función"
     else:
         mensaje_error += f"token inesperado '{token_value}' de tipo {token_type}"
-    
+
     print(mensaje_error)
-    print(f"  Token completo: {p}")
-    mensajes.append(mensaje_error)
+    _add_error(mensaje_error, (lineno, token_type, token_value))
+
+    # Recuperación: descartar tokens hasta sincronización
+    sincronizacion = {'PUNTOCOMA', 'LLAVE_DER'}
+    while True:
+        tok = parser.token()
+        if not tok:
+            break
+        if tok.type in sincronizacion:
+            break
+    # Continúa parseo tras recuperación
         
 # ------------------------------------------------------------
 # Función para registrar los tokens en un archivo de log
@@ -460,7 +572,7 @@ def log_token(mensaje):
     
 
 # Build the parser
-parser = yacc.yacc()
+parser = yacc.yacc(write_tables=False, debug=False)
 
 if __name__ == "__main__":
     print("Analizador sintáctico ARust \n")
@@ -476,6 +588,8 @@ if __name__ == "__main__":
         log_token("Inicio análisis sintáctico del archivo: " + archivo_entrada)
 
         # Ejecutar análisis sintáctico
+        set_source(datos)
+        _reset_errores()
         parser.parse(datos)
         
 
