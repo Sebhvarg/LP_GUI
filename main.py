@@ -6,10 +6,11 @@ import subprocess
 from contextlib import redirect_stdout
 from PySide6.QtWidgets import (
     QApplication, QWidget, QPushButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, 
-    QLabel, QListWidget, QInputDialog, QMessageBox, QFileDialog, QSplitter, QTextEdit
+    QLabel, QListWidget, QInputDialog, QMessageBox, QFileDialog, QSplitter, QTextEdit,
+    QProgressDialog
 )
 from PySide6.QtGui import QIcon, QFont, QColor, QPalette, QPainter, QTextFormat
-from PySide6.QtCore import Qt, QRect, QSize
+from PySide6.QtCore import Qt, QRect, QSize, QTimer
 
 sys.path.append(os.path.abspath("Analizadores"))
 
@@ -390,6 +391,15 @@ class MainWindow(QWidget):
         self.output_area.clear()
         self.error_output.clear()
         
+        # Crear diálogo de progreso
+        progress = QProgressDialog(f"Analizando código ({type_name})...", None, 0, 0, self)
+        progress.setWindowTitle("Procesando")
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setCancelButton(None)
+        progress.setMinimumDuration(0)
+        progress.show()
+        QApplication.processEvents()
+        
         # Nombre del archivo actual para el log
         current_filename = self.current_file if self.current_file else "sin_titulo.rs"
         
@@ -521,6 +531,8 @@ class MainWindow(QWidget):
         except Exception as e:
             self.error_output.setText(f"Excepción durante el análisis: {str(e)}")
             self.output_area.setText(global_output.getvalue())
+        finally:
+            progress.close()
 
 def main():
     app = QApplication(sys.argv)

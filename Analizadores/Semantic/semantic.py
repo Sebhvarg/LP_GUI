@@ -407,6 +407,45 @@ def p_funcion(p):
             "definida": True
         }
 
+# Declaración de funciones con parámetros
+def p_funcion_parametros(p):
+    '''funcion : FUNCION IDENTIFICADOR PAREN_IZQ parametros PAREN_DER LLAVE_IZQ programa LLAVE_DER
+               | FUNCION IDENTIFICADOR PAREN_IZQ parametros PAREN_DER FLECHA tipo_dato LLAVE_IZQ programa LLAVE_DER'''
+    nombre = p[2]
+    # Para la regla con flecha (9 elementos): FUNCION ID ( params ) -> tipo { programa }
+    # len(p) = 10, tipo_retorno está en p[7]
+    tipo_retorno = p[7] if len(p) == 10 else None
+    
+    if nombre in tabla_simbolos["funciones"]:
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Función '{nombre}' ya fue declarada previamente."
+        print(mensaje)
+        mensajes.append(mensaje)
+    else:
+        # Extraer información de parámetros
+        params_info = p[4] if p[4] else []
+        num_params = len(params_info) if isinstance(params_info, list) else 1
+        tabla_simbolos["funciones"][nombre] = {
+            "params": params_info if isinstance(params_info, list) else [params_info],
+            "retorno": tipo_retorno,
+            "definida": True
+        }
+
+def p_parametros(p):
+    '''parametros : IDENTIFICADOR
+                  | IDENTIFICADOR COMA parametros
+                  | IDENTIFICADOR DOSPUNTOS tipo_dato 
+                  | IDENTIFICADOR DOSPUNTOS tipo_dato COMA parametros
+    '''
+    # Retornar la estructura de parámetros para que p_funcion_parametros pueda contarlos
+    if len(p) == 2:  # Solo IDENTIFICADOR
+        p[0] = [p[1]]
+    elif len(p) == 4 and p[2] == ',':  # IDENTIFICADOR COMA parametros
+        p[0] = [p[1]] + (p[3] if isinstance(p[3], list) else [p[3]])
+    elif len(p) == 4:  # IDENTIFICADOR DOSPUNTOS tipo_dato
+        p[0] = [(p[1], p[3])]
+    elif len(p) == 6:  # IDENTIFICADOR DOSPUNTOS tipo_dato COMA parametros
+        p[0] = [(p[1], p[3])] + (p[5] if isinstance(p[5], list) else [p[5]])
+
 # REGLA 16: Validar llamadas a funciones
 def p_llamada_funcion(p):
     '''llamada_funcion : IDENTIFICADOR PAREN_IZQ PAREN_DER PUNTOCOMA
@@ -709,7 +748,9 @@ if __name__ == "__main__":
         for func, info in tabla_simbolos["funciones"].items():
             retorno = info.get("retorno", "void")
             params = len(info.get("params", []))
-            print(f"  {func}({params} params) -> {retorno}")
+            mensaje_func = f"  {func}({params} params) -> {retorno}"
+            print(mensaje_func)
+            log_token(mensaje_func)
         
         # REGLA 21: Advertencia sobre variables no usadas
         print("\n--- Advertencias ---")
