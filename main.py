@@ -1,6 +1,8 @@
 import sys
 import os
 import io
+import datetime
+import subprocess
 from contextlib import redirect_stdout
 from PySide6.QtWidgets import (
     QApplication, QWidget, QPushButton, QPlainTextEdit, QVBoxLayout, QHBoxLayout, 
@@ -20,6 +22,33 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
+def get_git_user():
+    try:
+        result = subprocess.run(['git', 'config', 'user.name'], capture_output=True, text=True)
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+        else:
+            return "unknown_user"
+    except Exception:
+        return "unknown_user"
+
+def generate_log(type_name, content, filename):
+    usuario_git = get_git_user()
+    fecha_hora = datetime.datetime.now().strftime("%d-%m-%Y-%Hh%M")
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # Limpiar nombre del tipo para el archivo (quitar acentos si es necesario, aunque el sistema de archivos moderno suele aguantar)
+    # Pero para seguir el formato pedido: semántico -> semantico
+    type_clean = type_name.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u')
+    
+    log_file_path = os.path.join(log_dir, f"{type_clean}-{usuario_git}-{fecha_hora}.txt")
+    
+    with open(log_file_path, 'a', encoding='utf-8') as log_file:
+        # Primera línea con usuario y archivo
+        log_file.write(f"Usuario: {usuario_git} | Archivo: {filename}\n")
+        log_file.write(content + "\n")
 
 try:
     import Analizadores.Lexicon.lexer as lex_module
@@ -215,6 +244,9 @@ class MainWindow(QWidget):
         self.btn_semantico = QPushButton("Análisis Semántico")
         self.btn_semantico.clicked.connect(lambda: self.run_analysis("Semántico"))
         
+        self.btn_todos = QPushButton("Analizar todo")
+        self.btn_todos.clicked.connect(lambda: self.run_analysis("Todos"))
+        
         self.output_label = QLabel("Resultado del Análisis")
         self.output_area = QTextEdit()
         self.output_area.setReadOnly(True)
@@ -224,6 +256,7 @@ class MainWindow(QWidget):
         right_layout.addWidget(self.btn_lexico)
         right_layout.addWidget(self.btn_sintactico)
         right_layout.addWidget(self.btn_semantico)
+        right_layout.addWidget(self.btn_todos)
         right_layout.addSpacing(20)
         right_layout.addWidget(self.output_label)
         right_layout.addWidget(self.output_area)
@@ -357,12 +390,23 @@ class MainWindow(QWidget):
         self.output_area.clear()
         self.error_output.clear()
         
-        # Captura de salida
-        f = io.StringIO()
+        # Nombre del archivo actual para el log
+        current_filename = self.current_file if self.current_file else "sin_titulo.rs"
+        
+        # Captura de salida global para la GUI
+        global_output = io.StringIO()
         
         try:
-            with redirect_stdout(f):
-                if type_name == "Léxico":
+            # Flags
+            run_lexico = type_name == "Léxico" or type_name == "Todos"
+            run_sintactico = type_name == "Sintáctico" or type_name == "Todos"
+            run_semantico = type_name == "Semántico" or type_name == "Todos"
+
+            if run_lexico:
+                lex_output = io.StringIO()
+                with redirect_stdout(lex_output):
+                    if type_name == "Todos":
+                        print("=== ANÁLISIS LÉXICO ===")
                     # Resetear lexer
                     lex_module.lexer.lineno = 1
                     lex_module.lexer.input(code)
@@ -371,8 +415,19 @@ class MainWindow(QWidget):
                         if not tok:
                             break
                         print(f"Línea {tok.lineno}: {tok.type} -> {tok.value}")
-                        
-                elif type_name == "Sintáctico":
+                    if type_name == "Todos":
+                        print("\n")
+                
+                # Escribir a salida global y generar log
+                lex_content = lex_output.getvalue()
+                global_output.write(lex_content)
+                generate_log("Léxico", lex_content, current_filename)
+                    
+            if run_sintactico:
+                syn_output = io.StringIO()
+                with redirect_stdout(syn_output):
+                    if type_name == "Todos":
+                        print("=== ANÁLISIS SINTÁCTICO ===")
                     # Resetear mensajes
                     syn_module.mensajes.clear()
                     # Resetear lexer
@@ -383,8 +438,19 @@ class MainWindow(QWidget):
                     else:
                         for msg in syn_module.mensajes:
                             print(msg)
-                            
-                elif type_name == "Semántico":
+                    if type_name == "Todos":
+                        print("\n")
+                
+                # Escribir a salida global y generar log
+                syn_content = syn_output.getvalue()
+                global_output.write(syn_content)
+                generate_log("Sintáctico", syn_content, current_filename)
+                        
+            if run_semantico:
+                sem_output = io.StringIO()
+                with redirect_stdout(sem_output):
+                    if type_name == "Todos":
+                        print("=== ANÁLISIS SEMÁNTICO ===")
                     
                     sem_module.mensajes.clear()
                     # Resetear tabla de símbolos
@@ -423,8 +489,13 @@ class MainWindow(QWidget):
                     else:
                         for msg in sem_module.mensajes:
                             print(msg)
+                
+                # Escribir a salida global y generar log
+                sem_content = sem_output.getvalue()
+                global_output.write(sem_content)
+                generate_log("Semántico", sem_content, current_filename)
 
-            output = f.getvalue()
+            output = global_output.getvalue()
             self.output_area.setText(output)
             
             # Verificar errores en la salida para actualizar la consola de errores
@@ -438,7 +509,7 @@ class MainWindow(QWidget):
 
         except Exception as e:
             self.error_output.setText(f"Excepción durante el análisis: {str(e)}")
-            self.output_area.setText(f.getvalue())
+            self.output_area.setText(global_output.getvalue())
 
 def main():
     app = QApplication(sys.argv)
