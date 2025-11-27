@@ -7,4 +7,3 @@ parsetab.py
 *build
 *dist
 *.spec
-/assets/doc

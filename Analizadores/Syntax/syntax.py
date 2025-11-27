@@ -20,6 +20,18 @@ from Lexicon.lexer import tokens, get_git_user
 
 mensajes = [] #Guarda los errores
 
+# Precedencia de operadores
+precedence = (
+    ('left', 'O', 'O_IGUAL'),
+    ('left', 'Y', 'Y_IGUAL'),
+    ('left', 'IGUALDOBLE', 'DIFERENTE'),
+    ('left', 'MAYOR', 'MENOR', 'MAYOR_IGUAL', 'MENOR_IGUAL'),
+    ('left', 'SUMA', 'RESTA', 'MAS_IGUAL', 'MENOS_IGUAL'),
+    ('left', 'MULT', 'DIV', 'MODULO', 'POR_IGUAL', 'DIV_IGUAL', 'MOD_IGUAL'),
+    ('right', 'NO', 'BIT_NO'),
+    ('right', 'UMINUS'), # Operador unario menos
+)
+
 # ------------------------------------------------------------   
 def p_programa(p):
     '''programa : instrucciones
@@ -35,14 +47,15 @@ def p_instrucciones(p):
                  | llamada_funcion
                  | expresion_sin_puntocoma
                  | clase
+                 | estructura_datos
+                 | retorno_funcion
+                 | continue_break
+                 | eliminar_clase
                  ''' 
-#sombrado
+
 def p_bloque(p):
     '''bloque : LLAVE_IZQ programa LLAVE_DER
-    '''
-
-def p_bloque_con_retorno(p):
-    '''bloque_con_retorno : LLAVE_IZQ programa LLAVE_DER
+              | LLAVE_IZQ LLAVE_DER
     '''
 
 def p_expresion_sin_puntocoma(p):
@@ -70,13 +83,23 @@ def  p_valor(p):
              | CARACTER
              | BOOLEANO
              | IDENTIFICADOR
-             | asignacion 
              | valor_numerico
              | operacion_aritmetica
              | tupla
              | matriz
+             | vector
              | llamada_funcion_sin_puntocoma
-             | bloque_con_retorno'''
+             | bloque
+             | acceso_complejo
+             | instanciar_clase
+             '''
+
+def p_acceso_complejo(p):
+    '''acceso_complejo : tupla_acceso
+                       | matriz_acceso
+                       | acceso_atributo_clase
+                       | llamada_metodo_clase
+    '''
 
 def p_valor_booleano(p):
     '''valor : VERDAD
@@ -110,25 +133,20 @@ def p_tipo_dato(p):
     '''
 
 
-def p_valor_operacionAritmetica(p):
-    '''operacion_aritmetica : valor operador_aritmetico valor
-    | repite_operacion_aritmetica 
-    
-    
+def p_operacion_aritmetica(p):
+    '''operacion_aritmetica : valor SUMA valor
+                            | valor RESTA valor
+                            | valor MULT valor
+                            | valor DIV valor
+                            | valor MODULO valor
+                            | RESTA valor %prec UMINUS
     '''
-    
-def p_operador_aritmetico(p):
-    '''operador_aritmetico : SUMA
-                           | RESTA
-                           | MULT
-                           | DIV
-                           | MODULO'''
 
-def p_repite_operacionAritmetica(p):
-    '''repite_operacion_aritmetica : operacion_aritmetica 
-                                    | operacion_aritmetica operador_aritmetico valor_numerico'''
 def p_expresion_booleana(p):
-    '''expresion_booleana : valor operador_relacional valor    
+    '''expresion_booleana : valor operador_relacional valor
+                          | valor Y valor
+                          | valor O valor
+                          | NO valor
     '''
 
 def p_operador_relacional(p):
@@ -179,7 +197,7 @@ def p_llamada_funcion_sin_puntocoma(p):
                                      | IDENTIFICADOR PAREN_IZQ repite_valores PAREN_DER
     '''
 def p_retorno_funcion(p):
-    '''instrucciones : RETORNO valor PUNTOCOMA
+    '''retorno_funcion : RETORNO valor PUNTOCOMA
     '''
 # -------- Estructuras de datos ----------------------
 
@@ -194,7 +212,7 @@ def p_tupla(p):
             | PAREN_IZQ repite_valores COMA tupla PAREN_DER
     '''
 def p_tupla_acceso(p):
-    '''valor : IDENTIFICADOR PUNTO ENTERO
+    '''tupla_acceso : IDENTIFICADOR PUNTO ENTERO
     '''
 
 def p_tupla_asignacion(p):
@@ -213,14 +231,11 @@ def p_matriz_asignacion(p):
                   | IDENTIFICADOR IGUAL matriz PUNTOCOMA
     '''
 def p_matriz_acceso(p):
-    '''valor : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER
+    '''matriz_acceso : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER
+                     | IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER
+                     | IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER
     '''
-def p_matriz_acceso_doble(p):
-    '''valor : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER
-    '''
-def p_matriz_acceso_triple(p):
-    '''valor : IDENTIFICADOR CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER CORCHETE_IZQ ENTERO CORCHETE_DER
-    '''
+
 def p_clase(p):
     '''clase : ESTRUCTURA IDENTIFICADOR LLAVE_IZQ atributos_clase LLAVE_DER
     '''
@@ -240,20 +255,20 @@ def p_atributos_clase(p):
                       | atributos_clase MUTABLE IDENTIFICADOR DOSPUNTOS tipo_dato COMA
     '''
 def p_instanciar_clase(p):
-    '''valor : IDENTIFICADOR DOSPUNTOS DOSPUNTOS NUEVO PAREN_IZQ PAREN_DER
+    '''instanciar_clase : IDENTIFICADOR DOSPUNTOS DOSPUNTOS NUEVO PAREN_IZQ PAREN_DER
     '''
 def p_eliminar_clase(p):
-    '''instrucciones : ELIMINAR IDENTIFICADOR PUNTOCOMA
+    '''eliminar_clase : ELIMINAR IDENTIFICADOR PUNTOCOMA
     '''
 def p_acceso_atributo_clase(p):
-    '''valor : IDENTIFICADOR PUNTO IDENTIFICADOR
+    '''acceso_atributo_clase : IDENTIFICADOR PUNTO IDENTIFICADOR
     '''
 def p_asignacion_atributo_clase(p):
     '''asignacion : IDENTIFICADOR PUNTO IDENTIFICADOR IGUAL valor PUNTOCOMA
     '''
 def p_llamada_metodo_clase(p):
-    '''valor : IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ PAREN_DER
-             | IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ repite_valores PAREN_DER
+    '''llamada_metodo_clase : IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ PAREN_DER
+                            | IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ repite_valores PAREN_DER
     '''
 def p_asignacion_metodo_clase(p):
     '''asignacion : IDENTIFICADOR PUNTO IDENTIFICADOR PAREN_IZQ PAREN_DER PUNTOCOMA
@@ -262,7 +277,7 @@ def p_asignacion_metodo_clase(p):
 def p_vector(p):
     '''vector : VECTOR_MACRO CORCHETE_IZQ repite_valores CORCHETE_DER 
                 | vectorvacio
-                
+                | VECTOR_MACRO CORCHETE_IZQ ENTERO PUNTOCOMA valor CORCHETE_DER
     '''
 def p_vector_vacio(p):
     '''vectorvacio : VECTOR MENOR tipo_dato MAYOR IGUAL VECTOR DOSPUNTOS DOSPUNTOS NUEVO PAREN_IZQ PAREN_DER 
@@ -271,11 +286,6 @@ def p_asignacion_vector_vacio(p):
     '''asignacion : VARIABLE IDENTIFICADOR DOSPUNTOS vectorvacio PUNTOCOMA
     '''
     
-    
-def p_vector_valor_repetido(p):
-    '''vector : VECTOR_MACRO CORCHETE_IZQ ENTERO PUNTOCOMA valor CORCHETE_DER 
-    '''
-
 def p_asignacion_vector(p):
     '''asignacion : VARIABLE IDENTIFICADOR IGUAL vector PUNTOCOMA
     '''
@@ -313,7 +323,7 @@ def p_asignacion_incremento(p):
                 
     '''
 def p_continue_break(p):
-    '''instrucciones : CONTINUAR PUNTOCOMA
+    '''continue_break : CONTINUAR PUNTOCOMA
                     | QUIEBRE PUNTOCOMA
     '''
 
@@ -329,11 +339,7 @@ def p_brazos_match(p):
 
 def p_brazo_match(p):
     '''brazo_match : patron FLECHA_DOBLE expresion_match
-                   | patron FLECHA_DOBLE bloque_match
-    '''
-
-def p_bloque_match(p):
-    '''bloque_match : LLAVE_IZQ programa LLAVE_DER
+                   | patron FLECHA_DOBLE bloque
     '''
 
 def p_patron(p):
@@ -342,12 +348,9 @@ def p_patron(p):
     '''
 
 def p_expresion_match(p):
-    '''expresion_match : llamada_funcion_sin_puntocoma
+    '''expresion_match : valor
                        | imprimir_sin_puntocoma
-                       | valor
     '''
-
-
 
 # ------------------------------------------------------------
     

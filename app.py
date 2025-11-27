@@ -24,7 +24,7 @@ def resource_path(relative_path):
 try:
     import Analizadores.Lexicon.lexer as lex_module
     import Analizadores.Syntax.syntax as syn_module
-    import Analizadores.Semantic.main as sem_module
+    import Analizadores.Semantic.semantic as sem_module
 except ImportError as e:
     print(f"Error importando módulos: {e}")
 
