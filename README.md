@@ -1,52 +1,29 @@
-# 🦀 Proyecto: Analizador de Código Rust
+# <div align="center">Proyecto Analizador de Código Rust <img src="assets/doc/img/arust_mascota.webp" width="50"></div>
 
-### Materia: Lenguajes de Programación  
-### Grupo 10  
-
-## 👥 Integrantes
-- Sebastian Holguin Vargas
-- Derian Baque Choez
-- Carlos Ronquillo Brush
+### <div align="center">Materia: Lenguajes de Programación</div>
+### <div align="center">Grupo 10</div>
 
 ---
 
-## 📘 Descripción del Proyecto
+## <div align="center">Integrantes <img src="assets/doc/img/integrantes.webp" width="60"></div>
 
-Este proyecto consta de un **analizador de código Rust** que puede realizar:
+- Sebastian Holguin Vargas  
+- Derian Baque Choez  
+- Carlos Ronquillo Brush  
 
-- Análisis léxico  
-- Análisis sintáctico  
-- Análisis semántico  
+---
 
-Utilizando la librería **PLY (Python Lex • Yacc)** para analizar el léxico, la sintaxis y la semántica del código.
+## <div align="center">Descripción del Proyecto <img src="assets/doc/img/desc.webp" width="50"></div>
 
-Para ejecutar el programa:
+Este proyecto consiste en un **analizador de código Rust** capaz de realizar:
 
-```bash
-python main.py
+- **Análisis léxico**  
+- **Análisis sintáctico**  
+- **Análisis semántico**
 
-## 🧩 Requisitos
+Utiliza **PLY (Python Lex-Yacc)** junto con una **interfaz gráfica en PySide6**, permitiendo cargar código Rust y visualizar cada análisis de manera clara.
 
-- **Python 3.12.6**
-- **PySide6**
-- **PLY**
-
-## 🔧 Instalación
-
-Instala las dependencias ejecutando:
-
-```bash
-pip install -r requirements.txt
-
-## ▶️ Uso
-
-Para ejecutar el programa:
+Para ejecutarlo:
 
 ```bash
 python main.py
-
-## 📦 Ejecutable
-
-Si lo deseas, puedes descargar el ejecutable en el siguiente enlace:
-
-https://github.com/
