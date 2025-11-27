@@ -1,29 +1,68 @@
-# <div align="center">Proyecto Analizador de Código Rust <img src="assets/doc/img/arust_mascota.webp" width="50"></div>
+<div style="text-align: center; align-items: center;">
+    <h1>Proyecto Analizador de Código Rust <img src="assets/doc/img/arust_mascota.webp" alt="arust_mascota" width="50"></h1>
+</div>
 
-### <div align="center">Materia: Lenguajes de Programación</div>
-### <div align="center">Grupo 10</div>
-
----
-
-## <div align="center">Integrantes <img src="assets/doc/img/integrantes.webp" width="60"></div>
-
-- Sebastian Holguin Vargas  
-- Derian Baque Choez  
-- Carlos Ronquillo Brush  
+### Materia: Lenguajes de Programación  
+### Grupo 10  
 
 ---
 
-## <div align="center">Descripción del Proyecto <img src="assets/doc/img/desc.webp" width="50"></div>
+<div style="align-items: center;">
+    <h2>Integrantes <img src="assets/doc/img/integrantes.webp" alt="integrantes" width="60"></h2>
+</div>
 
-Este proyecto consiste en un **analizador de código Rust** capaz de realizar:
+<ul>
+    <li>Sebastián Holguín Vargas</li>
+    <li>Derian Baque Choez</li>
+    <li>Carlos Ronquillo Brush</li>
+</ul>
 
-- **Análisis léxico**  
-- **Análisis sintáctico**  
-- **Análisis semántico**
+---
 
-Utiliza **PLY (Python Lex-Yacc)** junto con una **interfaz gráfica en PySide6**, permitiendo cargar código Rust y visualizar cada análisis de manera clara.
+<div>
+    <h2>Descripción del Proyecto <img src="assets/doc/img/desc.webp" alt="descripcion" width="50"></h2>
+</div>
 
-Para ejecutarlo:
+<p>
+    Este proyecto consiste en un analizador de código Rust que realiza análisis léxico, sintáctico y semántico. Utiliza la librería PLY de Python junto con Lex y Yacc para llevar a cabo el análisis del léxico, la sintaxis y la semántica del código en Rust.
+</p>
 
-```bash
-python main.py
+<pre><code>python main.py</code></pre>
+
+---
+
+<div style="align-items: center;">
+    <h2>Requisitos <img src="assets/doc/img/req.webp" alt="requisitos" width="25"></h2>
+</div>
+
+<ul>
+    <li>Python 3.12.6</li>
+    <li>PySide6</li>
+    <li>PLY</li>
+</ul>
+
+---
+
+<div style="align-items: center;">
+    <h2>Instalación <img src="assets/doc/img/ins.webp" alt="instalacion" width="40"></h2>
+</div>
+
+<pre><code>pip install -r requirements.txt</code></pre>
+
+---
+
+<div style="align-items: center;">
+    <h2>Uso <img src="assets/img/logo.png" alt="logo" width="25"></h2>
+</div>
+
+<p>Para ejecutar el programa, simplemente ejecuta el archivo <code>main.py</code>:</p>
+
+<pre><code>python main.py</code></pre>
+
+---
+
+<h2>Ejecutable</h2>
+
+<p>También puedes descargar el ejecutable en el siguiente enlace:</p>
+
+<pre><code>https://github.com/</code></pre>
