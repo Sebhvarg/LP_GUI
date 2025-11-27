@@ -166,7 +166,7 @@ def p_asignacion(p):
         
         # Verificar que no exista ya en el scope actual
         if nombre in tabla_simbolos["variables"]:
-            mensaje = f"Error semántico: Variable '{nombre}' ya fue declarada previamente."
+            mensaje = f"Error semántico: en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' ya fue declarada previamente."
             print(mensaje)
             mensajes.append(mensaje)
         elif tipo_var is not None:
@@ -183,7 +183,7 @@ def p_asignacion(p):
         nuevo_tipo = p[3]
         
         if nombre not in tabla_simbolos["variables"]:
-            mensaje = f"Error semántico: Variable '{nombre}' no ha sido declarada."
+            mensaje = f"Error semántico: en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' no ha sido declarada."
             print(mensaje)
             mensajes.append(mensaje)
         else:
@@ -191,13 +191,13 @@ def p_asignacion(p):
             
             # REGLA 3: No se puede reasignar constantes
             if isinstance(info, dict) and info.get("const", False):
-                mensaje = f"Error semántico: No se puede modificar la constante '{nombre}'."
+                mensaje = f"Error semántico: en la línea {p.lineno(1)}, columna {p.lexpos(1)}: No se puede modificar la constante '{nombre}'."
                 print(mensaje)
                 mensajes.append(mensaje)
             
             # REGLA 4: No se puede reasignar variables inmutables (let sin mut)
             elif isinstance(info, dict) and not info.get("mutable", False) and not info.get("const", False):
-                mensaje = f"Error semántico: No se puede reasignar la variable inmutable '{nombre}'. Use 'let mut' para variables mutables."
+                mensaje = f"Error semántico: en la línea {p.lineno(1)}, columna {p.lexpos(1)}: No se puede reasignar la variable inmutable '{nombre}'. Use 'let mut' para variables mutables."
                 print(mensaje)
                 mensajes.append(mensaje)
             
@@ -205,7 +205,7 @@ def p_asignacion(p):
             elif nuevo_tipo is not None and isinstance(info, dict):
                 tipo_actual = info.get("tipo")
                 if tipo_actual and not son_tipos_compatibles(tipo_actual, nuevo_tipo):
-                    mensaje = f"Error semántico: Tipo incompatible en reasignación de '{nombre}'. Se esperaba '{tipo_actual}', se recibió '{nuevo_tipo}'."
+                    mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Tipo incompatible en reasignación de '{nombre}'. Se esperaba '{tipo_actual}', se recibió '{nuevo_tipo}'."
                     print(mensaje)
                     mensajes.append(mensaje)
 
@@ -216,7 +216,7 @@ def p_asignacion_mutable(p):
     tipo_var = p[5]
     
     if nombre in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: Variable '{nombre}' ya fue declarada previamente."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' ya fue declarada previamente."
         print(mensaje)
         mensajes.append(mensaje)
     elif tipo_var is not None:
@@ -234,7 +234,7 @@ def p_asignacion_constante(p):
     tipo_var = p[4]
     
     if nombre in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: Constante '{nombre}' ya fue declarada previamente."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Constante '{nombre}' ya fue declarada previamente."
         print(mensaje)
         mensajes.append(mensaje)
     elif tipo_var is not None:
@@ -253,11 +253,11 @@ def p_asignacion_explicita_valor(p):
     tipo_valor = p[6]
     
     if nombre in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: Variable '{nombre}' ya fue declarada previamente."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' ya fue declarada previamente."
         print(mensaje)
         mensajes.append(mensaje)
     elif tipo_valor is not None and not son_tipos_compatibles(tipo_declarado, tipo_valor):
-        mensaje = f"Error semántico: Tipo incompatible. Variable '{nombre}' declarada como '{tipo_declarado}' pero recibe '{tipo_valor}'."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Tipo incompatible. Variable '{nombre}' declarada como '{tipo_declarado}' pero recibe '{tipo_valor}'."
         print(mensaje)
         mensajes.append(mensaje)
     else:
@@ -301,7 +301,7 @@ def p_valor(p):
              p[0] = tipo
          else:
              # REGLA 9: Verificar uso de variables no declaradas
-             mensaje = f"Error semántico: Variable '{nombre}' no ha sido declarada."
+             mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' no ha sido declarada."
              print(mensaje)
              mensajes.append(mensaje)
              p[0] = None
@@ -324,14 +324,14 @@ def p_valor_operacionAritmetica(p):
         
         # REGLA 11: Operaciones aritméticas solo entre tipos numéricos
         if not es_tipo_numerico(tipo1):
-            mensaje = f"Error semántico: Operación aritmética no válida. '{tipo1}' no es un tipo numérico."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Operación aritmética no válida. '{tipo1}' no es un tipo numérico."
             print(mensaje)
             mensajes.append(mensaje)
             p[0] = None
             return
         
         if not es_tipo_numerico(tipo2):
-            mensaje = f"Error semántico: Operación aritmética no válida. '{tipo2}' no es un tipo numérico."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Operación aritmética no válida. '{tipo2}' no es un tipo numérico."
             print(mensaje)
             mensajes.append(mensaje)
             p[0] = None
@@ -339,7 +339,7 @@ def p_valor_operacionAritmetica(p):
         
         # REGLA 12: Verificar compatibilidad de tipos en operaciones
         if not son_tipos_compatibles(tipo1, tipo2):
-            mensaje = f"Error semántico: Tipos incompatibles en operación aritmética. No se puede operar '{tipo1}' con '{tipo2}'."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Tipos incompatibles en operación aritmética. No se puede operar '{tipo1}' con '{tipo2}'."
             print(mensaje)
             mensajes.append(mensaje)
             p[0] = None
@@ -374,7 +374,7 @@ def p_expresion_booleana(p):
     
     if tipo1 is not None and tipo2 is not None:
         if not son_tipos_compatibles(tipo1, tipo2):
-            mensaje = f"Error semántico: Comparación entre tipos incompatibles '{tipo1}' y '{tipo2}'."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Comparación entre tipos incompatibles '{tipo1}' y '{tipo2}'."
             print(mensaje)
             mensajes.append(mensaje)
     p[0] = "bool"
@@ -397,7 +397,7 @@ def p_funcion(p):
     
     # REGLA 15: No redeclarar funciones
     if nombre in tabla_simbolos["funciones"]:
-        mensaje = f"Error semántico: Función '{nombre}' ya fue declarada previamente."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Función '{nombre}' ya fue declarada previamente."
         print(mensaje)
         mensajes.append(mensaje)
     else:
@@ -414,7 +414,7 @@ def p_llamada_funcion(p):
     nombre = p[1]
     
     if nombre not in tabla_simbolos["funciones"]:
-        mensaje = f"Error semántico: Función '{nombre}' no ha sido declarada."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Función '{nombre}' no ha sido declarada."
         print(mensaje)
         mensajes.append(mensaje)
 
@@ -425,7 +425,7 @@ def p_asignacion_metodo_clase(p):
     metodo = p[3]
 
     if nombre not in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: la variable '{nombre}' no ha sido definida."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: la variable '{nombre}' no ha sido definida."
         print(mensaje)
         mensajes.append(mensaje)
         return
@@ -435,7 +435,7 @@ def p_asignacion_metodo_clase(p):
     # Verificar si es string
     if tipo_var == "str":
         if metodo not in tabla_simbolos["tipos"]["str-funciones"]:
-            mensaje = f"Error semántico: el método '{metodo}' no es parte de las funciones de string."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no es parte de las funciones de string."
             print(mensaje)
             mensajes.append(mensaje)
             return
@@ -446,18 +446,18 @@ def p_asignacion_metodo_clase(p):
             args_requeridos = especificacion["args"]
             tiene_args = (len(p) == 8)  # con repite_valores
             if args_requeridos == 0 and tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' no acepta argumentos."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no acepta argumentos."
                 print(mensaje)
                 mensajes.append(mensaje)
             if args_requeridos > 0 and not tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
                 print(mensaje)
                 mensajes.append(mensaje)
     
     # Verificar si es numérico
     elif es_tipo_numerico(tipo_var):
         if metodo not in tabla_simbolos["tipos"]["num-funciones"]:
-            mensaje = f"Error semántico: el método '{metodo}' no es parte de las funciones numéricas."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no es parte de las funciones numéricas."
             print(mensaje)
             mensajes.append(mensaje)
             return
@@ -468,16 +468,16 @@ def p_asignacion_metodo_clase(p):
             args_requeridos = especificacion["args"]
             tiene_args = (len(p) == 8)  # con repite_valores
             if args_requeridos == 0 and tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' no acepta argumentos."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no acepta argumentos."
                 print(mensaje)
                 mensajes.append(mensaje)
             if args_requeridos > 0 and not tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
                 print(mensaje)
                 mensajes.append(mensaje)
     
     else:
-        mensaje = f"Error semántico: la variable '{nombre}' de tipo '{tipo_var}' no soporta métodos."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: la variable '{nombre}' de tipo '{tipo_var}' no soporta métodos."
         print(mensaje)
         mensajes.append(mensaje)
 
@@ -487,7 +487,7 @@ def p_llamada_funcion_sin_puntocoma(p):
     nombre = p[1]
     
     if nombre not in tabla_simbolos["funciones"]:
-        mensaje = f"Error semántico: Función '{nombre}' no ha sido declarada."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Función '{nombre}' no ha sido declarada."
         print(mensaje)
         mensajes.append(mensaje)
         p[0] = None
@@ -503,7 +503,7 @@ def p_llamada_metodo_clase(p):
     metodo = p[3]
 
     if nombre not in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: la variable '{nombre}' no ha sido definida."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: la variable '{nombre}' no ha sido definida."
         print(mensaje)
         mensajes.append(mensaje)
         p[0] = None
@@ -515,7 +515,7 @@ def p_llamada_metodo_clase(p):
     # Verificar si es string
     if tipo_var == "str":
         if metodo not in tabla_simbolos["tipos"]["str-funciones"]:
-            mensaje = f"Error semántico: el método '{metodo}' no es parte de las funciones de string."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no es parte de las funciones de string."
             print(mensaje)
             mensajes.append(mensaje)
             p[0] = None
@@ -527,11 +527,11 @@ def p_llamada_metodo_clase(p):
             args_requeridos = especificacion["args"]
             tiene_args = (len(p) == 7)  # con repite_valores
             if args_requeridos == 0 and tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' no acepta argumentos."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no acepta argumentos."
                 print(mensaje)
                 mensajes.append(mensaje)
             if args_requeridos > 0 and not tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
                 print(mensaje)
                 mensajes.append(mensaje)
 
@@ -541,7 +541,7 @@ def p_llamada_metodo_clase(p):
     # Verificar si es numérico
     elif es_tipo_numerico(tipo_var):
         if metodo not in tabla_simbolos["tipos"]["num-funciones"]:
-            mensaje = f"Error semántico: el método '{metodo}' no es parte de las funciones numéricas."
+            mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no es parte de las funciones numéricas."
             print(mensaje)
             mensajes.append(mensaje)
             p[0] = None
@@ -553,11 +553,11 @@ def p_llamada_metodo_clase(p):
             args_requeridos = especificacion["args"]
             tiene_args = (len(p) == 7)  # con repite_valores
             if args_requeridos == 0 and tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' no acepta argumentos."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' no acepta argumentos."
                 print(mensaje)
                 mensajes.append(mensaje)
             if args_requeridos > 0 and not tiene_args:
-                mensaje = f"Error semántico: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
+                mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: el método '{metodo}' requiere al menos {args_requeridos} argumento(s)."
                 print(mensaje)
                 mensajes.append(mensaje)
 
@@ -565,7 +565,7 @@ def p_llamada_metodo_clase(p):
         p[0] = especificacion["ret"] if especificacion else tipo_var
     
     else:
-        mensaje = f"Error semántico: la variable '{nombre}' de tipo '{tipo_var}' no soporta métodos."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: la variable '{nombre}' de tipo '{tipo_var}' no soporta métodos."
         print(mensaje)
         mensajes.append(mensaje)
         p[0] = None
@@ -613,7 +613,7 @@ def p_tupla_acceso(p):
     indice = p[3]
     
     if nombre not in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: Variable '{nombre}' no ha sido declarada."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' no ha sido declarada."
         print(mensaje)
         mensajes.append(mensaje)
         p[0] = None
@@ -629,7 +629,7 @@ def p_matriz_acceso(p):
     nombre = p[1]
     
     if nombre not in tabla_simbolos["variables"]:
-        mensaje = f"Error semántico: Variable '{nombre}' no ha sido declarada."
+        mensaje = f"Error semántico en la línea {p.lineno(1)}, columna {p.lexpos(1)}: Variable '{nombre}' no ha sido declarada."
         print(mensaje)
         mensajes.append(mensaje)
         p[0] = None

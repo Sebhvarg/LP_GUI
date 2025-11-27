@@ -206,7 +206,7 @@ def t_nueva_linea(t):
 
 
 def t_error(t):
-    mensaje = f"❌ Error léxico: carácter no reconocido '{t.value[0]}' en línea {t.lineno}"
+    mensaje = f"Error léxico: carácter no reconocido '{t.value[0]}' en línea {t.lineno}"
     print(mensaje)
     log_token(mensaje)
     t.lexer.skip(1)
@@ -276,7 +276,7 @@ if __name__ == "__main__":
                 print(mensaje)
                 log_token(mensaje)
 
-        print("\n✅ Análisis léxico completado. Revise la carpeta 'logs' para ver el resultado.")
+        print("\n Análisis léxico completado. Revise la carpeta 'logs' para ver el resultado.")
 
     except FileNotFoundError:
-        print("❌ Archivo no encontrado. Verifique la ruta e intente nuevamente.")
+        print("Archivo no encontrado. Verifique la ruta e intente nuevamente.")

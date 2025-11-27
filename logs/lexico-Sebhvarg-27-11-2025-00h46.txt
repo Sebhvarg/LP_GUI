@@ -1,0 +1,2 @@
+❌ Error léxico: carácter no reconocido '@' en línea 3
+❌ Error léxico: carácter no reconocido '@' en línea 3

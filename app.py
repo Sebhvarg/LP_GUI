@@ -375,7 +375,9 @@ class MainWindow(QWidget):
                 elif type_name == "Sintáctico":
                     # Resetear mensajes
                     syn_module.mensajes.clear()
-                    syn_module.parser.parse(code)
+                    # Resetear lexer
+                    lex_module.lexer.lineno = 1
+                    syn_module.parser.parse(code, lexer=lex_module.lexer)
                     if not syn_module.mensajes:
                         print("Análisis sintáctico completado sin errores.")
                     else:
@@ -389,7 +391,9 @@ class MainWindow(QWidget):
                     sem_module.tabla_simbolos["variables"] = {}
                     sem_module.tabla_simbolos["funciones"] = {}
                     
-                    sem_module.parser.parse(code)
+                    # Resetear lexer
+                    lex_module.lexer.lineno = 1
+                    sem_module.parser.parse(code, lexer=lex_module.lexer)
                     
                     if not sem_module.mensajes:
                         print("Análisis semántico completado.")
