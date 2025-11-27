@@ -354,7 +354,7 @@ class MainWindow(QWidget):
             self.error_output.setText("Error: El editor está vacío.")
             return
 
-        self.output_area.setText(f"Ejecutando Análisis {type_name}...\n")
+        self.output_area.clear()
         self.error_output.clear()
         
         # Captura de salida
