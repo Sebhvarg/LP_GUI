@@ -327,13 +327,13 @@ class MainWindow(QWidget):
         """)
 
     def ensure_rust_dir(self):
-        if not os.path.exists("rust_files"):
-            os.makedirs("rust_files")
+        if not os.path.exists("test"):
+            os.makedirs("test")
 
     def refresh_file_list(self):
         self.file_list.clear()
-        if os.path.exists("rust_files"):
-            files = [f for f in os.listdir("rust_files") if f.endswith(".rs")]
+        if os.path.exists("test"):
+            files = [f for f in os.listdir("test") if f.endswith(".rs")]
             self.file_list.addItems(files)
 
     def create_file(self):
@@ -341,7 +341,7 @@ class MainWindow(QWidget):
         if ok and name:
             if not name.endswith(".rs"):
                 name += ".rs"
-            path = os.path.join("rust_files", name)
+            path = os.path.join("test", name)
             if os.path.exists(path):
                 QMessageBox.warning(self, "Error", "El archivo ya existe.")
             else:
@@ -355,7 +355,7 @@ class MainWindow(QWidget):
             name = item.text()
             reply = QMessageBox.question(self, "Confirmar", f"¿Eliminar {name}?", QMessageBox.Yes | QMessageBox.No)
             if reply == QMessageBox.Yes:
-                os.remove(os.path.join("rust_files", name))
+                os.remove(os.path.join("test", name))
                 self.refresh_file_list()
                 self.text_input.clear()
                 self.current_file = None
@@ -363,7 +363,7 @@ class MainWindow(QWidget):
     def load_file_content(self, item):
         name = item.text()
         self.current_file = name
-        path = os.path.join("rust_files", name)
+        path = os.path.join("test", name)
         if os.path.exists(path):
             with open(path, "r", encoding='utf-8') as f:
                 content = f.read()
@@ -373,7 +373,7 @@ class MainWindow(QWidget):
 
     def save_file(self):
         if self.current_file:
-            path = os.path.join("rust_files", self.current_file)
+            path = os.path.join("test", self.current_file)
             content = self.text_input.toPlainText()
             with open(path, "w", encoding='utf-8') as f:
                 f.write(content)
