@@ -15,7 +15,7 @@ import subprocess
 import sys
 
 # ------------------------------------------------------------
-# Definición de los tokens 
+# Definición de los tokens
 # ------------------------------------------------------------
 tokens = [
     # ---------------- Aporte Fernando, Sebastian ----------------

@@ -1,0 +1,29 @@
+Usuario: Fernando | Archivo: test2.rs
+=== ANÁLISIS SINTÁCTICO ===
+Error sintáctico en la línea 7: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 8: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 9: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 19: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 26: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 33: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 37: identificador 'contador' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 60: valor entero '10' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 76: identificador 'a3' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 82: palabra reservada 'if' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 87: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 99: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 7: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 8: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 9: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 19: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 26: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 33: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 37: identificador 'contador' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 60: valor entero '10' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 76: identificador 'a3' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 82: palabra reservada 'if' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 87: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 99: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+
+
+

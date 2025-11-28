@@ -72,8 +72,6 @@ tabla_simbolos = {
             "split", "trim", "chars", "is_empty",
             "concat", "parse", "count"
         ],
-
-        
         "num-funciones": [
             "to_string", "to_le", "to_be", "to_ne",
             "swap_bytes", "to_be_bytes", "to_le_bytes",
@@ -87,16 +85,13 @@ tabla_simbolos = {
             "sin", "cos", "tan", "log", "log10", "log2",
             "exp", "exp2"
         ],
-
         "tipos_numericos": [
             "i8", "i16", "i32", "i64", "i128",
             "u8", "u16", "u32", "u64", "u128",
             "f32", "f64", "isize", "usize"
         ],
-
         "tipos_primitivos": ["bool", "char", "str"],
     },
-
     "clases": {}, 
     "scope_actual": "global",
     "scopes": {"global": {}}

@@ -1,0 +1,17 @@
+Usuario: Fernando | Archivo: test2.rs
+Análisis semántico completado.
+
+=== TABLA DE SÍMBOLOS ===
+
+--- Variables ---
+  x: let int - Usado: ✗ (no usada)
+
+--- Funciones ---
+  main(0 params) -> None
+
+--- Advertencias ---
+Advertencia: Variable 'x' declarada pero no usada.
+
+--- Constantes (redeclaraciones / modificaciones) ---
+  (ninguna incidencia sobre constantes)
+
