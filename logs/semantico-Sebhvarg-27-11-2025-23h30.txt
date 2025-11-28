@@ -1,0 +1,116 @@
+Usuario: Sebhvarg | Archivo: test3.rs
+Error semántico: en la línea 199, columna 5: Variable 'valor' no ha sido declarada.
+Error semántico: en la línea 205, columna 5: Variable 'LIMITE' no ha sido declarada.
+Error semántico en la línea 212, columna 21: Variable 'texto' no ha sido declarada.
+Error semántico en la línea 219, columna 9: Variable 'cadena' no ha sido declarada.
+Error semántico en la línea 227, columna 16: Variable 'palabra' no ha sido declarada.
+Error semántico en la línea 234, columna 16: Variable 'str1' no ha sido declarada.
+Error semántico en la línea 241, columna 13: Variable 'a' no ha sido declarada.
+Error semántico en la línea 259, columna 5: Variable 'numero' ya fue declarada previamente.
+Error semántico en la línea 264, columna 5: Tipo incompatible. Constante 'VALOR' declarada como 'u32' pero recibe 'str'.
+Error semántico en la línea 269, columna 5: Tipo incompatible. Variable 'edad' declarada como 'u32' pero recibe 'float'.
+Error semántico en la línea 274, columna 17: Variable 'tupla_no_existe' no ha sido declarada.
+Error semántico en la línea 279, columna 20: Variable 'arreglo_inexistente' no ha sido declarada.
+Error semántico en la línea 284, columna 5: Variable 'entero' ya fue declarada previamente.
+Error semántico en la línea 285, columna 5: Tipo incompatible. Variable 'flotante' declarada como 'f64' pero recibe 'float'.
+Error semántico en la línea 286, columna 27: Variable 'flotante' no ha sido declarada.
+Error semántico en la línea 291, columna 5: Tipo incompatible. Variable 'a' declarada como 'f32' pero recibe 'float'.
+Error semántico en la línea 292, columna 5: Variable 'b' ya fue declarada previamente.
+Error semántico en la línea 293, columna 19: Variable 'a' no ha sido declarada.
+Error semántico en la línea 299, columna 6523: el método 'length' no es parte de las funciones de string.
+Error semántico en la línea 323, columna 5: No se puede reasignar la variable inmutable 'valor'. Use 'let mut' para variables mutables.
+Error semántico en la línea 462, columna 17: Variable 'Book' no ha sido declarada.
+Error semántico: en la línea 473, columna 5: Variable 'b' ya fue declarada previamente.
+Error semántico en la línea 482, columna 5: Variable 'resultado' ya fue declarada previamente.
+Error semántico en la línea 502, columna 5: No se puede modificar la constante 'MAXIMO'.
+Error semántico en la línea 505, columna 5: Variable 'texto' ya fue declarada previamente.
+Error semántico en la línea 506, columna 5: Variable 'numero' ya fue declarada previamente.
+Error semántico en la línea 511, columna 9: No se puede reasignar la variable inmutable 'y'. Use 'let mut' para variables mutables.
+Error semántico en la línea 514, columna 5: Variable 'precio' ya fue declarada previamente.
+Error semántico en la línea 517, columna 5: Variable 'resultado' ya fue declarada previamente.
+Error semántico en la línea 517, columna 21: Función 'funcion_desconocida' no ha sido declarada.
+Error semántico en la línea 524, columna 5: No se puede reasignar la variable inmutable 'inmutable'. Use 'let mut' para variables mutables.
+
+=== TABLA DE SÍMBOLOS ===
+
+--- Variables ---
+  función: let int - Usado: ✗ (no usada)
+  año: let int - Usado: ✗ (no usada)
+  mensaje: let str - Usado: ✗ (no usada)
+  escape_invalido: let str - Usado: ✗ (no usada)
+  operacion: let int - Usado: ✗ (no usada)
+  costo: let int - Usado: ✗ (no usada)
+  variable: let int - Usado: ✗ (no usada)
+  comparacion: let int - Usado: ✗ (no usada)
+  precio: let float - Usado: ✗ (no usada)
+  contador: let int - Usado: ✗ (no usada)
+  MAX: const int - Usado: ✗ (no usada)
+  numero: let int - Usado: ✓
+  entero: let int - Usado: ✓
+  str2: let str - Usado: ✓
+  b: let bool - Usado: ✓
+  VALOR: const u32 - Usado: ✗ (no usada)
+  texto: let str - Usado: ✗ (no usada)
+  valor: let None - Usado: ✗ (no usada)
+  resultado: let str - Usado: ✗ (no usada)
+  potencia: let int - Usado: ✗ (no usada)
+  caracter: let str - Usado: ✗ (no usada)
+  otro_dato: let int - Usado: ✗ (no usada)
+  a: let int - Usado: ✓
+  y: let int - Usado: ✗ (no usada)
+  total: let int - Usado: ✗ (no usada)
+  MAXIMO: const int - Usado: ✗ (no usada)
+  mezcla: let str - Usado: ✗ (no usada)
+  x: let int - Usado: ✗ (no usada)
+  final_val: let int - Usado: ✗ (no usada)
+  inmutable: let int - Usado: ✗ (no usada)
+  valores: let None - Usado: ✗ (no usada)
+  palabra: let str - Usado: ✗ (no usada)
+
+--- Funciones ---
+  calcular(0 params) -> i32
+  tipo_explicito_incorrecto(0 params) -> None
+  constante_tipo_mal(0 params) -> None
+  declaracion_tipo_incompatible(0 params) -> None
+  tupla_variable_inexistente(0 params) -> None
+  array_no_declarado(0 params) -> None
+  mezcla_numerica(0 params) -> None
+  modulo_flotante(0 params) -> None
+  metodo_string_invalido(0 params) -> None
+  struct_inmutable(0 params) -> None
+
+--- Advertencias ---
+Advertencia: Variable 'función' declarada pero no usada.
+Advertencia: Variable 'año' declarada pero no usada.
+Advertencia: Variable 'mensaje' declarada pero no usada.
+Advertencia: Variable 'escape_invalido' declarada pero no usada.
+Advertencia: Variable 'operacion' declarada pero no usada.
+Advertencia: Variable 'costo' declarada pero no usada.
+Advertencia: Variable 'variable' declarada pero no usada.
+Advertencia: Variable 'comparacion' declarada pero no usada.
+Advertencia: Variable 'precio' declarada pero no usada.
+Advertencia: Variable 'contador' declarada pero no usada.
+Advertencia: Variable 'MAX' declarada pero no usada.
+Advertencia: Variable 'VALOR' declarada pero no usada.
+Advertencia: Variable 'texto' declarada pero no usada.
+Advertencia: Variable 'valor' declarada pero no usada.
+Advertencia: Variable 'resultado' declarada pero no usada.
+Advertencia: Variable 'potencia' declarada pero no usada.
+Advertencia: Variable 'caracter' declarada pero no usada.
+Advertencia: Variable 'otro_dato' declarada pero no usada.
+Advertencia: Variable 'y' declarada pero no usada.
+Advertencia: Variable 'total' declarada pero no usada.
+Advertencia: Variable 'MAXIMO' declarada pero no usada.
+Advertencia: Variable 'mezcla' declarada pero no usada.
+Advertencia: Variable 'x' declarada pero no usada.
+Advertencia: Variable 'final_val' declarada pero no usada.
+Advertencia: Variable 'inmutable' declarada pero no usada.
+Advertencia: Variable 'valores' declarada pero no usada.
+Advertencia: Variable 'palabra' declarada pero no usada.
+
+--- Constantes (redeclaraciones / modificaciones) ---
+Error semántico en la línea 264, columna 5: Tipo incompatible. Constante 'VALOR' declarada como 'u32' pero recibe 'str'.
+Error semántico en la línea 502, columna 5: No se puede modificar la constante 'MAXIMO'.
+
+Total modificaciones inválidas a constantes: 1
+

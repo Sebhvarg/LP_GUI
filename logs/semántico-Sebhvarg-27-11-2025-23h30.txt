@@ -1,0 +1,10 @@
+Error semántico en la línea 323, columna 5: No se puede reasignar la variable inmutable 'valor'. Use 'let mut' para variables mutables.
+Error semántico en la línea 482, columna 5: Variable 'resultado' ya fue declarada previamente.
+Error semántico en la línea 502, columna 5: No se puede modificar la constante 'MAXIMO'.
+Error semántico en la línea 505, columna 5: Variable 'texto' ya fue declarada previamente.
+Error semántico en la línea 506, columna 5: Variable 'numero' ya fue declarada previamente.
+Error semántico en la línea 511, columna 9: No se puede reasignar la variable inmutable 'y'. Use 'let mut' para variables mutables.
+Error semántico en la línea 514, columna 5: Variable 'precio' ya fue declarada previamente.
+Error semántico en la línea 517, columna 5: Variable 'resultado' ya fue declarada previamente.
+Error semántico en la línea 517, columna 21: Función 'funcion_desconocida' no ha sido declarada.
+Error semántico en la línea 524, columna 5: No se puede reasignar la variable inmutable 'inmutable'. Use 'let mut' para variables mutables.

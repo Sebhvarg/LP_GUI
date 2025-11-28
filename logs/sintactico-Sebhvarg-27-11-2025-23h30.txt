@@ -1,0 +1,88 @@
+Usuario: Sebhvarg | Archivo: test3.rs
+Error sintáctico en la línea 14: punto '.' inesperado. Revise el acceso a atributos o métodos
+Error sintáctico en la línea 22: valor entero '5' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 28: valor entero '123' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 31: operador relacional '<' inesperado. Revise la expresión booleana
+Error sintáctico en la línea 39: identificador '_' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 42: token inesperado '&' de tipo BIT_Y
+Error sintáctico en la línea 53: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 66: identificador 'b' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 71: tipo de dato 'i32' inesperado. Revise la declaración de variable o función
+Error sintáctico en la línea 77: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 84: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 91: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 98: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 104: coma ',' inesperada. Revise la lista de parámetros o valores
+Error sintáctico en la línea 112: token inesperado '!' de tipo NO
+Error sintáctico en la línea 117: valor entero '2' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 127: falta punto y coma al final de la declaración
+Error sintáctico en la línea 129: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 138: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 145: token inesperado 'loop' de tipo LAZO
+Error sintáctico en la línea 153: token inesperado 'trait' de tipo RASGO
+Error sintáctico en la línea 159: token inesperado '&' de tipo BIT_Y
+Error sintáctico en la línea 166: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 171: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 329: operador de asignación '+=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 335: operador de asignación '-=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 341: operador de asignación '+=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 347: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 353: punto y coma inesperado ';'
+Error sintáctico en la línea 358: operador relacional '<' inesperado. Revise la expresión booleana
+Error sintáctico en la línea 362: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 371: punto y coma inesperado ';'
+Error sintáctico en la línea 377: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 396: token inesperado 'self' de tipo MISMO
+Error sintáctico en la línea 401: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 452: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 458: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 468: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 477: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 482: token inesperado '!' de tipo NO
+Error sintáctico en la línea 510: falta punto y coma al final de la declaración
+Error sintáctico en la línea 527: token inesperado '!' de tipo NO
+Error sintáctico en la línea 534: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 14: punto '.' inesperado. Revise el acceso a atributos o métodos
+Error sintáctico en la línea 22: valor entero '5' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 28: valor entero '123' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 31: operador relacional '<' inesperado. Revise la expresión booleana
+Error sintáctico en la línea 39: identificador '_' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 42: token inesperado '&' de tipo BIT_Y
+Error sintáctico en la línea 53: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 66: identificador 'b' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 71: tipo de dato 'i32' inesperado. Revise la declaración de variable o función
+Error sintáctico en la línea 77: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 84: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 91: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 98: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 104: coma ',' inesperada. Revise la lista de parámetros o valores
+Error sintáctico en la línea 112: token inesperado '!' de tipo NO
+Error sintáctico en la línea 117: valor entero '2' inesperado. Revise la expresión o asignación
+Error sintáctico en la línea 127: falta punto y coma al final de la declaración
+Error sintáctico en la línea 129: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 138: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 145: token inesperado 'loop' de tipo LAZO
+Error sintáctico en la línea 153: token inesperado 'trait' de tipo RASGO
+Error sintáctico en la línea 159: token inesperado '&' de tipo BIT_Y
+Error sintáctico en la línea 166: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 171: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 329: operador de asignación '+=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 335: operador de asignación '-=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 341: operador de asignación '+=' inesperado. Posible falta de identificador o valor
+Error sintáctico en la línea 347: operador aritmético '+' inesperado. Revise la expresión
+Error sintáctico en la línea 353: punto y coma inesperado ';'
+Error sintáctico en la línea 358: operador relacional '<' inesperado. Revise la expresión booleana
+Error sintáctico en la línea 362: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 371: punto y coma inesperado ';'
+Error sintáctico en la línea 377: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 396: token inesperado 'self' de tipo MISMO
+Error sintáctico en la línea 401: paréntesis de cierre ')' inesperado. Posible paréntesis de apertura faltante
+Error sintáctico en la línea 452: llave de apertura '{' inesperada. Revise la sintaxis de la declaración anterior
+Error sintáctico en la línea 458: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 468: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 477: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 482: token inesperado '!' de tipo NO
+Error sintáctico en la línea 510: falta punto y coma al final de la declaración
+Error sintáctico en la línea 527: token inesperado '!' de tipo NO
+Error sintáctico en la línea 534: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+
