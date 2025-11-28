@@ -47,6 +47,10 @@
     <h2>Instalación <img src="assets/doc/img/ins.webp" alt="instalacion" width="40"></h2>
 </div>
 
+<p>
+1.- Desde la raíz del proyecto ejecute:
+</p>
+
 <pre><code>pip install -r requirements.txt</code></pre>
 
 ---
@@ -55,7 +59,7 @@
     <h2>Uso <img src="assets/img/logo.png" alt="logo" width="25"></h2>
 </div>
 
-<p>Para ejecutar el programa, simplemente ejecuta el archivo <code>main.py</code>:</p>
+<p>Para ejecutar el programa, simplemente ejecute el archivo <code>main.py</code>:</p>
 
 <pre><code>python main.py</code></pre>
 
@@ -65,10 +69,12 @@
 
 <p>También puedes descargar el ejecutable en el siguiente enlace:</p>
 
-<pre><code>https://github.com/</code></pre>
+[Descargar Ejecutable](https://github.com/Sebhvarg/LP_GUI/releases/download/v1.0/app.exe)
+
+<span>Compatible con Windows</span>
 
 ---
-
-## Tutorial
-
+<span>
+Desarrollado por esttudiantes de la Escuela Superior Politécnica del Litoral (ESPOL)
+</span>
 
