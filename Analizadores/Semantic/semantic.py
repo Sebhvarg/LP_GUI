@@ -361,6 +361,12 @@ def p_valor(p):
              print(mensaje)
              mensajes.append(mensaje)
              p[0] = None
+     elif p.slice[1].type == 'matriz':
+         p[0] = p[1]  # tipo inferido por p_matriz
+     elif p.slice[1].type == 'vector':
+         p[0] = p[1]  # tipo inferido por p_vector
+     elif p.slice[1].type == 'tupla':
+         p[0] = p[1]  # tipo inferido por p_tupla
      else:
          # Propagar tipo de operaciones complejas
          p[0] = p[1]
@@ -421,6 +427,56 @@ def p_repite_operacionAritmetica(p):
     '''repite_operacion_aritmetica : operacion_aritmetica 
                                     | operacion_aritmetica operador_aritmetico valor_numerico'''
     p[0] = p[1] if len(p) == 2 else "int"
+
+# --- Nuevas reglas para inferencia de colecciones ---
+def p_repite_valores(p):
+    '''repite_valores : valor
+                      | valor COMA repite_valores'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1]] + p[3]
+
+def _infer_collection_element_type(element_types):
+    # Filtrar None y tomar prioridad: float > int > str > char > bool > otro
+    tipos = [t for t in element_types if t is not None]
+    if not tipos:
+        return 'unknown'
+    # Si todos iguales, devolver ese
+    if all(t == tipos[0] for t in tipos):
+        return tipos[0]
+    # Mezcla numérica -> float si alguno float, sino int
+    if all(t in ('int','float') for t in tipos):
+        return 'float' if 'float' in tipos else 'int'
+    # Caso mixto devolver 'mixed'
+    return 'mixed'
+
+def p_matriz(p):
+    '''matriz : CORCHETE_IZQ repite_valores CORCHETE_DER
+              | CORCHETE_IZQ CORCHETE_DER'''
+    if len(p) == 4:
+        elem_tipo = _infer_collection_element_type(p[2])
+        p[0] = f"matriz<{elem_tipo}>"
+    else:
+        p[0] = "matriz<vacía>"
+
+def p_vector(p):
+    '''vector : VECTOR_MACRO CORCHETE_IZQ repite_valores CORCHETE_DER
+              | VECTOR_MACRO CORCHETE_IZQ CORCHETE_DER'''  # vector vacío
+    if len(p) == 5:
+        elem_tipo = _infer_collection_element_type(p[3])
+        p[0] = f"vector<{elem_tipo}>"
+    else:
+        p[0] = "vector<vacío>"
+
+def p_tupla(p):
+    '''tupla : PAREN_IZQ repite_valores PAREN_DER
+             | PAREN_IZQ PAREN_DER'''
+    if len(p) == 4:
+        elem_tipo = _infer_collection_element_type(p[2])
+        p[0] = f"tupla<{elem_tipo}>"
+    else:
+        p[0] = "tupla<vacía>"
 
 # REGLA 13: Validar tipos en expresiones booleanas
 def p_expresion_booleana(p):

@@ -1,0 +1,16 @@
+Error sintáctico en la línea 5, columna 44: Token inesperado '['
+Error sintáctico en la línea 6, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 13, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 17, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 21, columna 1: Token inesperado '}'
+Error sintáctico: Fin de archivo inesperado
+Error semántico en la línea 5, columna 35: Variable 'matriz' no ha sido declarada.
+Error sintáctico en la línea 5, columna 44: Token inesperado '['
+Error sintáctico en la línea 6, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 13, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 17, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 21, columna 1: Token inesperado '}'
+Error sintáctico: Fin de archivo inesperado
+{'variables': {'matriz3d': {'tipo': None, 'const': False, 'mutable': False, 'usado': False}, 'lista': {'tipo': None, 'const': False, 'mutable': False, 'usado': False}}, 'funciones': {}, 'tipos': {'str-funciones': ['len', 'push', 'contains', 'starts_with', 'ends_with', 'index_of', 'to_uppercase', 'to_lowercase', 'replace', 'substring', 'split', 'trim', 'chars', 'is_empty', 'concat', 'parse', 'count'], 'num-funciones': ['to_string', 'to_le', 'to_be', 'to_ne', 'swap_bytes', 'to_be_bytes', 'to_le_bytes', 'to_ne_bytes', 'abs', 'signum', 'pow', 'saturating_add', 'saturating_sub', 'saturating_mul', 'max', 'min', 'clamp', 'sqrt', 'round', 'floor', 'ceil', 'trunc', 'fract', 'abs', 'powi', 'powf', 'sin', 'cos', 'tan', 'log', 'log10', 'log2', 'exp', 'exp2'], 'tipos_numericos': ['i8', 'i16', 'i32', 'i64', 'i128', 'u8', 'u16', 'u32', 'u64', 'u128', 'f32', 'f64', 'isize', 'usize'], 'tipos_primitivos': ['bool', 'char', 'str']}, 'clases': {}, 'scope_actual': 'global', 'scopes': {'global': {}}}
+Advertencia: Variable 'matriz3d' declarada pero no usada.
+Advertencia: Variable 'lista' declarada pero no usada.

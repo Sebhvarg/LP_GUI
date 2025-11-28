@@ -1,0 +1,2 @@
+Inicio análisis sintáctico del archivo: test\test_matriz.rs
+Análisis sintáctico completado sin errores.

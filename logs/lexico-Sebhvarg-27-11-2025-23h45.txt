@@ -1,0 +1,26 @@
+Línea 13: ENTERO -> 1
+Línea 13: CORCHETE_DER -> ]
+Línea 13: PAREN_DER -> )
+Línea 13: PUNTOCOMA -> ;
+Línea 16: VARIABLE -> let
+Línea 16: IDENTIFICADOR -> lista
+Línea 16: IGUAL -> =
+Línea 16: CORCHETE_IZQ -> [
+Línea 16: ENTERO -> 1
+Línea 16: COMA -> ,
+Línea 16: ENTERO -> 2
+Línea 16: COMA -> ,
+Línea 16: ENTERO -> 3
+Línea 16: CORCHETE_DER -> ]
+Línea 16: PUNTOCOMA -> ;
+Línea 17: IMPRIMIRLN -> println!
+Línea 17: PAREN_IZQ -> (
+Línea 17: CADENA -> "lista[2] = {}"
+Línea 17: COMA -> ,
+Línea 17: IDENTIFICADOR -> lista
+Línea 17: CORCHETE_IZQ -> [
+Línea 17: ENTERO -> 2
+Línea 17: CORCHETE_DER -> ]
+Línea 17: PAREN_DER -> )
+Línea 17: PUNTOCOMA -> ;
+Línea 21: LLAVE_DER -> }
