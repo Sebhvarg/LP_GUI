@@ -1,0 +1,33 @@
+Usuario: Fernando | Archivo: test1.rs
+=== ANÁLISIS SINTÁCTICO ===
+Error sintáctico en la línea 7: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 8: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 11: corchete de apertura '[' inesperado. Revise la sintaxis del array o vector
+Error sintáctico en la línea 11: punto y coma inesperado ';'
+Error sintáctico en la línea 17: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 22: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 27: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 49: identificador 'a' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 55: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 63: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 68: palabra reservada 'let' en posición incorrecta. Revise la sintaxis de declaración
+Error sintáctico en la línea 73: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 78: identificador 'dor' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 89: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 7: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 8: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 11: corchete de apertura '[' inesperado. Revise la sintaxis del array o vector
+Error sintáctico en la línea 11: punto y coma inesperado ';'
+Error sintáctico en la línea 17: identificador 'i' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 22: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 27: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 49: identificador 'a' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 55: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 63: palabra reservada 'else' en posición incorrecta. Revise la estructura de control
+Error sintáctico en la línea 68: palabra reservada 'let' en posición incorrecta. Revise la sintaxis de declaración
+Error sintáctico en la línea 73: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 78: identificador 'dor' inesperado. Puede faltar un operador o declaración
+Error sintáctico en la línea 89: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+
+
+

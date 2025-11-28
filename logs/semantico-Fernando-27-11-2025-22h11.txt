@@ -1,0 +1,66 @@
+Usuario: Fernando | Archivo: test1.rs
+=== ANÁLISIS SEMÁNTICO ===
+Error sintáctico en la línea 7, columna 14: Token inesperado ':'
+Error sintáctico en la línea 11, columna 22: Token inesperado '5'
+Error sintáctico en la línea 16, columna 5: Token inesperado 'for'
+Error sintáctico en la línea 18, columna 5: Token inesperado '}'
+Error sintáctico en la línea 22, columna 5: Token inesperado '}'
+Error sintáctico en la línea 24, columna 5: Token inesperado '}'
+Error sintáctico en la línea 28, columna 5: Token inesperado 'while'
+Error sintáctico en la línea 30, columna 9: Token inesperado 'k'
+Error sintáctico en la línea 34, columna 5: Token inesperado 'println!'
+Error semántico en la línea 40, columna 5: Variable 'acc' ya fue declarada previamente.
+Error semántico en la línea 41, columna 5: Variable 'activo' ya fue declarada previamente.
+Error semántico en la línea 42, columna 5: No se puede reasignar la variable inmutable 'activo'. Use 'let mut' para variables mutables.
+Error sintáctico en la línea 48, columna 5: Token inesperado 'if'
+Error sintáctico en la línea 48, columna 19: Token inesperado '}'
+Error sintáctico en la línea 51, columna 5: Token inesperado '}'
+Error sintáctico en la línea 55, columna 5: Token inesperado '}'
+Error sintáctico en la línea 59, columna 5: Token inesperado '}'
+Error sintáctico en la línea 67: falta punto y coma al final de la declaración de 'p' (análisis parcial).
+Error sintáctico en la línea 68, columna 9: Token inesperado 'x'
+Error sintáctico en la línea 70, columna 5: Token inesperado 'fn'
+Error sintáctico en la línea 72, columna 5: Token inesperado '}'
+Error sintáctico en la línea 73, columna 6: Token inesperado ';'
+Error léxico: carácter no reconocido '$' en línea 76
+Error léxico: carácter no reconocido '#' en línea 77
+Error léxico: carácter no reconocido '@' en línea 78
+Error léxico: carácter no reconocido '°' en línea 79
+Error sintáctico en la línea 80, columna 5: Token inesperado 'println!'
+Error semántico en la línea 82, columna 5: Variable 'acc' ya fue declarada previamente.
+Error semántico en la línea 83, columna 5: Variable 'acc' ya fue declarada previamente.
+Error semántico en la línea 85, columna 5: Variable 'activo' ya fue declarada previamente.
+Error semántico en la línea 86, columna 5: No se puede reasignar la variable inmutable 'activo'. Use 'let mut' para variables mutables.
+Error sintáctico en la línea 88, columna 5: Token inesperado 'total'
+Error sintáctico: Fin de archivo inesperado
+
+=== TABLA DE SÍMBOLOS ===
+
+--- Variables ---
+  b: mut i32 - Usado: ✗ (no usada)
+  activo: let bool - Usado: ✗ (no usada)
+  lista: let [ - Usado: ✗ (no usada)
+  acc: mut i32 - Usado: ✗ (no usada)
+  resultado: let i32 - Usado: ✗ (no usada)
+  p: let i32 - Usado: ✗ (no usada)
+  valor: let int - Usado: ✗ (no usada)
+  cont: let int - Usado: ✗ (no usada)
+  mal: let int - Usado: ✗ (no usada)
+
+--- Funciones ---
+  (ninguna función declarada)
+
+--- Advertencias ---
+Advertencia: Variable 'b' declarada pero no usada.
+Advertencia: Variable 'activo' declarada pero no usada.
+Advertencia: Variable 'lista' declarada pero no usada.
+Advertencia: Variable 'acc' declarada pero no usada.
+Advertencia: Variable 'resultado' declarada pero no usada.
+Advertencia: Variable 'p' declarada pero no usada.
+Advertencia: Variable 'valor' declarada pero no usada.
+Advertencia: Variable 'cont' declarada pero no usada.
+Advertencia: Variable 'mal' declarada pero no usada.
+
+--- Constantes (redeclaraciones / modificaciones) ---
+  (ninguna incidencia sobre constantes)
+

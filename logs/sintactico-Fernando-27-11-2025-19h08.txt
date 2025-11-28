@@ -1,3 +1,0 @@
-Usuario: Fernando | Archivo: test2.rs
-Análisis sintáctico completado sin errores.
-
