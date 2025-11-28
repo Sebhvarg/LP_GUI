@@ -1,0 +1,135 @@
+Línea 2: FUNCION -> fn
+Línea 2: IDENTIFICADOR -> main
+Línea 2: PAREN_IZQ -> (
+Línea 2: PAREN_DER -> )
+Línea 2: LLAVE_IZQ -> {
+Línea 3: VARIABLE -> let
+Línea 3: MUTABLE -> mut
+Línea 3: IDENTIFICADOR -> limite
+Línea 3: DOSPUNTOS -> :
+Línea 3: I32 -> i32
+Línea 3: IGUAL -> =
+Línea 3: ENTERO -> 10
+Línea 3: PUNTOCOMA -> ;
+Línea 4: VARIABLE -> let
+Línea 4: MUTABLE -> mut
+Línea 4: IDENTIFICADOR -> suma
+Línea 4: DOSPUNTOS -> :
+Línea 4: I32 -> i32
+Línea 4: IGUAL -> =
+Línea 4: ENTERO -> 0
+Línea 4: PUNTOCOMA -> ;
+Línea 5: VARIABLE -> let
+Línea 5: MUTABLE -> mut
+Línea 5: IDENTIFICADOR -> contador
+Línea 5: DOSPUNTOS -> :
+Línea 5: I32 -> i32
+Línea 5: IGUAL -> =
+Línea 5: ENTERO -> 0
+Línea 5: PUNTOCOMA -> ;
+Línea 7: IMPRIMIRLN -> println!
+Línea 7: PAREN_IZQ -> (
+Línea 7: CADENA -> "Iniciando suma de pares"
+Línea 7: PAREN_DER -> )
+Línea 7: PUNTOCOMA -> ;
+Línea 10: MIENTRAS -> while
+Línea 10: PAREN_IZQ -> (
+Línea 10: IDENTIFICADOR -> contador
+Línea 10: MENOR_IGUAL -> <=
+Línea 10: IDENTIFICADOR -> limite
+Línea 10: PAREN_DER -> )
+Línea 10: LLAVE_IZQ -> {
+Línea 11: SI -> if
+Línea 11: PAREN_IZQ -> (
+Línea 11: IDENTIFICADOR -> contador
+Línea 11: MODULO -> %
+Línea 11: ENTERO -> 2
+Línea 11: IGUALDOBLE -> ==
+Línea 11: ENTERO -> 0
+Línea 11: PAREN_DER -> )
+Línea 11: LLAVE_IZQ -> {
+Línea 12: IDENTIFICADOR -> suma
+Línea 12: IGUAL -> =
+Línea 12: IDENTIFICADOR -> suma
+Línea 12: SUMA -> +
+Línea 12: IDENTIFICADOR -> contador
+Línea 12: PUNTOCOMA -> ;
+Línea 13: IMPRIMIRLN -> println!
+Línea 13: PAREN_IZQ -> (
+Línea 13: CADENA -> "Sumando: "
+Línea 13: COMA -> ,
+Línea 13: IDENTIFICADOR -> contador
+Línea 13: PAREN_DER -> )
+Línea 13: PUNTOCOMA -> ;
+Línea 14: LLAVE_DER -> }
+Línea 14: SINO -> else
+Línea 14: LLAVE_IZQ -> {
+Línea 16: VARIABLE -> let
+Línea 16: MUTABLE -> mut
+Línea 16: IDENTIFICADOR -> temporal
+Línea 16: DOSPUNTOS -> :
+Línea 16: I32 -> i32
+Línea 16: IGUAL -> =
+Línea 16: ENTERO -> 1
+Línea 16: PUNTOCOMA -> ;
+Línea 17: LLAVE_DER -> }
+Línea 18: IDENTIFICADOR -> contador
+Línea 18: IGUAL -> =
+Línea 18: IDENTIFICADOR -> contador
+Línea 18: SUMA -> +
+Línea 18: ENTERO -> 1
+Línea 18: PUNTOCOMA -> ;
+Línea 19: LLAVE_DER -> }
+Línea 21: IMPRIMIRLN -> println!
+Línea 21: PAREN_IZQ -> (
+Línea 21: CADENA -> "La suma total es: "
+Línea 21: COMA -> ,
+Línea 21: IDENTIFICADOR -> suma
+Línea 21: PAREN_DER -> )
+Línea 21: PUNTOCOMA -> ;
+Línea 24: SI -> if
+Línea 24: PAREN_IZQ -> (
+Línea 24: IDENTIFICADOR -> suma
+Línea 24: MAYOR -> >
+Línea 24: ENTERO -> 20
+Línea 24: PAREN_DER -> )
+Línea 24: LLAVE_IZQ -> {
+Línea 25: IMPRIMIRLN -> println!
+Línea 25: PAREN_IZQ -> (
+Línea 25: CADENA -> "Suma grande"
+Línea 25: PAREN_DER -> )
+Línea 25: PUNTOCOMA -> ;
+Línea 26: LLAVE_DER -> }
+Línea 33: VARIABLE -> let
+Línea 33: IDENTIFICADOR -> dinero
+Línea 33: IGUAL -> =
+Línea 33: ENTERO -> 100
+Error léxico: carácter no reconocido '$' en línea 33
+Línea 33: PUNTOCOMA -> ;
+Línea 34: VARIABLE -> let
+Línea 34: IDENTIFICADOR -> codigo
+Error léxico: carácter no reconocido '#' en línea 34
+Línea 34: IGUAL -> =
+Línea 34: ENTERO -> 50
+Línea 34: PUNTOCOMA -> ;
+Línea 35: VARIABLE -> let
+Línea 35: IDENTIFICADOR -> correo
+Error léxico: carácter no reconocido '@' en línea 35
+Línea 35: IGUAL -> =
+Línea 35: CADENA -> "abc"
+Línea 35: PUNTOCOMA -> ;
+Línea 36: VARIABLE -> let
+Línea 36: IDENTIFICADOR -> grados
+Error léxico: carácter no reconocido '°' en línea 36
+Línea 36: IGUAL -> =
+Línea 36: ENTERO -> 35
+Línea 36: PUNTOCOMA -> ;
+Línea 37: LLAVE_DER -> }
+Error léxico: carácter no reconocido '$' en línea 33
+Error léxico: carácter no reconocido '#' en línea 34
+Error léxico: carácter no reconocido '@' en línea 35
+Error léxico: carácter no reconocido '°' en línea 36
+Error léxico: carácter no reconocido '$' en línea 33
+Error léxico: carácter no reconocido '#' en línea 34
+Error léxico: carácter no reconocido '@' en línea 35
+Error léxico: carácter no reconocido '°' en línea 36

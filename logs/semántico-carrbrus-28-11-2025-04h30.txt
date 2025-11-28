@@ -1,0 +1,28 @@
+Error sintáctico en la línea 3, columna 19: Token inesperado ':'
+Error sintáctico en la línea 7, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 10, columna 5: Token inesperado 'while'
+Error sintáctico en la línea 13, columna 13: Token inesperado 'println!'
+Error sintáctico en la línea 14, columna 9: Token inesperado '}'
+Error sintáctico en la línea 17, columna 9: Token inesperado '}'
+Error sintáctico en la línea 19, columna 5: Token inesperado '}'
+Error sintáctico en la línea 24, columna 5: Token inesperado 'if'
+Error sintáctico en la línea 26, columna 5: Token inesperado '}'
+Error sintáctico en la línea 37, columna 1: Token inesperado '}'
+Error sintáctico: Fin de archivo inesperado
+Error sintáctico en la línea 3, columna 19: Token inesperado ':'
+Error sintáctico en la línea 7, columna 5: Token inesperado 'println!'
+Error sintáctico en la línea 10, columna 5: Token inesperado 'while'
+Error sintáctico en la línea 13, columna 13: Token inesperado 'println!'
+Error sintáctico en la línea 14, columna 9: Token inesperado '}'
+Error sintáctico en la línea 17, columna 9: Token inesperado '}'
+Error sintáctico en la línea 19, columna 5: Token inesperado '}'
+Error sintáctico en la línea 24, columna 5: Token inesperado 'if'
+Error sintáctico en la línea 26, columna 5: Token inesperado '}'
+Error sintáctico en la línea 37, columna 1: Token inesperado '}'
+Error sintáctico: Fin de archivo inesperado
+{'variables': {'suma': {'tipo': 'i32', 'const': False, 'mutable': True, 'usado': False}, 'contador': {'tipo': 'i32', 'const': False, 'mutable': True, 'usado': False}, 'codigo': {'tipo': 'int', 'const': False, 'mutable': False, 'usado': False}, 'correo': {'tipo': 'str', 'const': False, 'mutable': False, 'usado': False}, 'grados': {'tipo': 'int', 'const': False, 'mutable': False, 'usado': False}}, 'funciones': {}, 'tipos': {'str-funciones': ['len', 'push', 'contains', 'starts_with', 'ends_with', 'index_of', 'to_uppercase', 'to_lowercase', 'replace', 'substring', 'split', 'trim', 'chars', 'is_empty', 'concat', 'parse', 'count'], 'num-funciones': ['to_string', 'to_le', 'to_be', 'to_ne', 'swap_bytes', 'to_be_bytes', 'to_le_bytes', 'to_ne_bytes', 'abs', 'signum', 'pow', 'saturating_add', 'saturating_sub', 'saturating_mul', 'max', 'min', 'clamp', 'sqrt', 'round', 'floor', 'ceil', 'trunc', 'fract', 'abs', 'powi', 'powf', 'sin', 'cos', 'tan', 'log', 'log10', 'log2', 'exp', 'exp2'], 'tipos_numericos': ['i8', 'i16', 'i32', 'i64', 'i128', 'u8', 'u16', 'u32', 'u64', 'u128', 'f32', 'f64', 'isize', 'usize'], 'tipos_primitivos': ['bool', 'char', 'str']}, 'clases': {}, 'scope_actual': 'global', 'scopes': {'global': {}}}
+Advertencia: Variable 'suma' declarada pero no usada.
+Advertencia: Variable 'contador' declarada pero no usada.
+Advertencia: Variable 'codigo' declarada pero no usada.
+Advertencia: Variable 'correo' declarada pero no usada.
+Advertencia: Variable 'grados' declarada pero no usada.

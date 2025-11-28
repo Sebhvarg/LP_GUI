@@ -1,0 +1,7 @@
+Inicio análisis sintáctico del archivo: test/test2.rs
+Error sintáctico en la línea 3: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 4: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 5: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 16: dos puntos ':' inesperados. Revise la sintaxis de declaración de tipo
+Error sintáctico en la línea 19: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
+Error sintáctico en la línea 37: llave de cierre '}' inesperada. Posible llave de apertura faltante o estructura mal formada
