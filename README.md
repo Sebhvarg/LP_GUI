@@ -12,7 +12,7 @@
 </div>
 
 <ul>
-    <li>Sebastián Holguín Vargas</li>
+    <li>Sebastián Holguin Vargas</li>
     <li>Derian Baque Choez</li>
     <li>Carlos Ronquillo Brush</li>
 </ul>
@@ -27,7 +27,6 @@
     Este proyecto consiste en un analizador de código Rust que realiza análisis léxico, sintáctico y semántico. Utiliza la librería PLY de Python junto con Lex y Yacc para llevar a cabo el análisis del léxico, la sintaxis y la semántica del código en Rust.
 </p>
 
-<pre><code>python main.py</code></pre>
 
 ---
 
